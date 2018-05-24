@@ -1,0 +1,15 @@
+<div class="dropdown-wrapper" [style.width] = "width + 'px'">
+  <span class="value">
+    <ng-content></ng-content>
+  </span>
+  <span class="dropdown-btn">
+    <i class="icon-down"></i>
+  </span>
+  <app-min-scroll-bar>
+    <ul class="dropdown-list">
+      <li *ngFor="let e of listData">
+        {{e.label}}
+      </li>
+    </ul>
+  </app-min-scroll-bar>
+</div>

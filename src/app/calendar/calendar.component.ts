@@ -15,7 +15,7 @@ export class CalendarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.lunarCalendarDataServer.getLunarMonthAndDay(1901, 1, 1);
+    this.lunarCalendarDataServer.getLunarMonthAndDay(1901, 2, 19);
   }
 
 }

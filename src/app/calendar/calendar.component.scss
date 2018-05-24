@@ -1,0 +1,10 @@
+.calendar-wrapper {
+  border: 2px solid #57abff;
+  display: flex;
+  .calendar-detail-wrapper{
+    flex: 0 1 75%;
+  }
+  .schedule-wrapper {
+    flex: 0 1 25%;
+  }
+}
