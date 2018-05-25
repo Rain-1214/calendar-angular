@@ -1,3 +1,13 @@
-<div class="min-scroll-bar-wrapper">
+<div class="min-scroll-bar-wrapper" 
+     [class.hasScroll]="showScroll" 
+     [style.maxHeight]="maxHeight + 'px'"
+     (mousewheel)="onMouseWheel($event)"
+     #wrapper>
   <ng-content></ng-content>
+  <div *ngIf="showScroll"
+       class="scroll-bar"
+       (click)="scrollBarClick($event)">
+    <div class="bar"
+         [style.top]="scrollBarScrollTop + 'px'"></div>
+  </div>
 </div>

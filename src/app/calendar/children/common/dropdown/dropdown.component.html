@@ -1,15 +1,24 @@
 <div class="dropdown-wrapper" [style.width] = "width + 'px'">
-  <span class="value">
-    <ng-content></ng-content>
+  <span class="value" (click)="showDropdownList($event)">
+    {{selectValue}}
   </span>
   <span class="dropdown-btn">
     <i class="icon-down"></i>
   </span>
-  <app-min-scroll-bar>
-    <ul class="dropdown-list">
-      <li *ngFor="let e of listData">
-        {{e.label}}
-      </li>
-    </ul>
-  </app-min-scroll-bar>
+  <div class="dropdown-list" *ngIf="dropdownListShow">
+    <app-min-scroll-bar [maxHeight]="maxHeight">
+      <ul>
+        <ng-container *ngIf="listData && listData.lenght !== 0;else notFindTemplate">
+          <li *ngFor="let e of listData" (click)="valueChange(e.value)">
+            {{e.label}}
+          </li>
+        </ng-container>
+        <ng-template #notFindTemplate>
+          <li class="disabled">
+            没有选项
+          </li>
+        </ng-template>
+      </ul>
+    </app-min-scroll-bar>
+  </div>
 </div>

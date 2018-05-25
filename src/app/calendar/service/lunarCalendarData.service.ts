@@ -69,6 +69,8 @@ export class LunarCalendarDataService {
    */
   private fromLunarDateSecondes = new Date(1899, 1, 10).getTime();
   private firstDateYear = 1899;
+  private safetyStartYear = 1900;
+  private safetyEndYear = 2050;
   private dataCache: { [key: string]: LunarData } = {};
 
   constructor() {}
@@ -229,6 +231,20 @@ export class LunarCalendarDataService {
         return `${this.lunarDayNumberToStrData[20]}${this.lunarDayNumberToStrData[day % 10]}`;
       case (day === 30):
         return this.lunarDayNumberToStrData[30];
+    }
+  }
+
+  /**
+   * 获取支持的年份范围
+   * @returns {Object} {
+   *  startYear: 开始年份,
+   *  endYear: 结束年份
+   * }
+   */
+  getScopeOfLunarYear(): { startYear: number, endYear: number } {
+    return {
+      startYear: this.safetyStartYear,
+      endYear: this.safetyEndYear
     }
   }
 }

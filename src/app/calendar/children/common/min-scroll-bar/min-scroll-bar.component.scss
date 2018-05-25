@@ -1,0 +1,29 @@
+.min-scroll-bar-wrapper{
+  position: relative;
+  &.hasScroll{
+    padding-right: 8px;
+    overflow: hidden;
+  }
+  .scroll-bar{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 100%;
+    background: #f2f2f2;
+    cursor: pointer;
+    &:hover{
+      background: #aeaeae;
+    }
+    .bar{
+      box-sizing: border-box;
+      width: 6px;
+      height: 30px;
+      position: absolute;
+      top: 0px;
+      right: 1px;
+      border: 1px solid #e1e1e1;
+      background: #fff;
+    }
+  }
+}

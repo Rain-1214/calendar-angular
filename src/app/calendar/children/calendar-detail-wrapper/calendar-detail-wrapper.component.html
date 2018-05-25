@@ -1,6 +1,8 @@
 <div class="wrapper">
   calendar-detail-wrapper
   <div>
-    <app-dropdown>123</app-dropdown>
+    <app-dropdown [maxHeight]="200"
+                  [(selectValue)]="currentYear"
+                  [listData]="yearListData"></app-dropdown>{{currentYear}}
   </div>
 </div>
