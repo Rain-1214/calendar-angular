@@ -1,11 +1,11 @@
-<div class="dropdown-wrapper" [style.width] = "width + 'px'">
+<div class="dropdown-wrapper" [style.width] = "width + 'px'" [style.display] = "display">
   <span class="value" (click)="showDropdownList($event)">
     {{selectValue}}
   </span>
-  <span class="dropdown-btn">
+  <span class="dropdown-btn" (click)="showDropdownList($event)">
     <i class="icon-down"></i>
   </span>
-  <div class="dropdown-list" *ngIf="dropdownListShow">
+  <div class="dropdown-list" [hidden]="!dropdownListShow">
     <app-min-scroll-bar [maxHeight]="maxHeight">
       <ul>
         <ng-container *ngIf="listData && listData.lenght !== 0;else notFindTemplate">

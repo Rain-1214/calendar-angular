@@ -1,8 +1,8 @@
 .min-scroll-bar-wrapper{
   position: relative;
+  overflow: hidden;
   &.hasScroll{
     padding-right: 8px;
-    overflow: hidden;
   }
   .scroll-bar{
     position: absolute;

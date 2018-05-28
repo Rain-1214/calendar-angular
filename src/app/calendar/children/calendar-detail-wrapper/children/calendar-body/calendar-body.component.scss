@@ -1,0 +1,17 @@
+$text-red: #e02d2d;
+
+table{
+  width: 100%;
+  .text-red{
+    color: $text-red;
+  }
+  tr{
+    th{
+      font-weight: normal;
+      padding: 6px 0;
+    }
+    td{
+      border-top: 1px solid #c8cacc;
+    }
+  }
+}

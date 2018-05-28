@@ -23,6 +23,7 @@ $icon-color: #898a8a;
     right: 0;
     top: 0;
     border-left: 1px solid $border-color;
+    cursor: pointer;
     .icon-down{
       &::after{
         content: '';

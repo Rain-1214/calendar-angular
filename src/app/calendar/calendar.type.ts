@@ -5,8 +5,6 @@ export interface LunarData {
   day: number;
   dayStr: string;
   currentMonthDaysNum: number;
-  prevMonthDaysNum: number;
-  nextMonthDaysNum: number;
   isLeapMonth: boolean;
   isLeapYear: boolean;
 }
@@ -14,4 +12,12 @@ export interface LunarData {
 export interface ListData {
   label: string;
   value: string | number;
+}
+
+
+export interface DateTableData {
+  day: number;
+  lunarDay: number;
+  lunarDayStr: string;
+  isWeekend: boolean;
 }

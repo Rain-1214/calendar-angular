@@ -1,8 +1,20 @@
 <div class="wrapper">
-  calendar-detail-wrapper
-  <div>
-    <app-dropdown [maxHeight]="200"
-                  [(selectValue)]="currentYear"
-                  [listData]="yearListData"></app-dropdown>{{currentYear}}
+  <div class="header">
+    <div>
+      <app-dropdown [maxHeight]="200"
+                    [(selectValue)]="currentYear"
+                    [listData]="yearListData"></app-dropdown>
+    </div>
+    <div>
+      <app-dropdown [maxHeight]="200"
+                    [(selectValue)]="currentMonth"
+                    [listData]="monthListData"></app-dropdown>
+    </div>
+    <div>
+      <button class="btn" (click)="resetDate()">返回今日</button>
+    </div>
+  </div>
+  <div class="body">
+    <app-calendar-body></app-calendar-body>
   </div>
 </div>

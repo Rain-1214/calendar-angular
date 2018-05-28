@@ -138,12 +138,10 @@ export class LunarCalendarDataService {
     }
     const result = {
       month: lunarMonth,
-      monthStr: this.lunarMonthNumberToStrData[month],
+      monthStr: this.lunarMonthNumberToStrData[lunarMonth],
       day: betweenDays,
-      dayStr: this.translateDayNumToCalendarStr(day),
+      dayStr: this.translateDayNumToCalendarStr(betweenDays),
       currentMonthDaysNum: currentMonthDaysNum,
-      prevMonthDaysNum: 1,
-      nextMonthDaysNum: 1,
       isLeapMonth,
       isLeapYear,
     };
@@ -245,6 +243,6 @@ export class LunarCalendarDataService {
     return {
       startYear: this.safetyStartYear,
       endYear: this.safetyEndYear
-    }
+    };
   }
 }

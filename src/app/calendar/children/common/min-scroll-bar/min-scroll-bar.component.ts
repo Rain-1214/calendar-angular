@@ -1,14 +1,15 @@
-import { Component, ViewChildren, ViewChild, AfterViewInit, Input, ElementRef, AfterContentChecked, Output } from '@angular/core';
+import { Component, ViewChildren, ViewChild, AfterViewInit, Input,
+  ElementRef, AfterContentChecked, Output, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'app-min-scroll-bar',
   templateUrl: './min-scroll-bar.component.html',
   styleUrls: ['./min-scroll-bar.component.scss']
 })
-export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked {
+export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked, AfterViewChecked {
 
   @ViewChild('wrapper') wrapper: ElementRef<HTMLDivElement>; // 指向包裹元素
-  @Input() maxHeight = Number.MAX_SAFE_INTEGER; // 设定的最大高度
+  @Input() maxHeight; // 设定的最大高度
   showScroll = false; // 是否显示滚动条
   sourceHeight = 0; // 要滚动的元素自身高度
   scrollBarScrollTop = 0; // 滚动条中的小滑块滚动的位置
@@ -18,6 +19,7 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
   maxScrollDistance: number; // 最大滚动距离
   childElementCount: number; // 子元素数量, 用于监听添加或删除新元素重新计算滚动位置
 
+  private defaultScrollLocation = 0; // 默认的滚动位置
   private _scrollTop = 0;
   // 元素滚动的位置
   set scrollTop (value: number) {
@@ -43,6 +45,9 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
     setTimeout(() => {
       this.showScroll = this.sourceHeight > this.maxHeight;
       this.maxScrollDistance = this.showScroll ? this.sourceHeight - this.maxHeight : 0;
+      if (this.defaultScrollLocation !== 0) {
+        this.setScrollTop(this.defaultScrollLocation);
+      }
     }, 0);
   }
 
@@ -54,7 +59,15 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
     if (this.scrollElement.style.position === '') {
       this.scrollElement.style.position = 'relative';
     }
-    this.initData();
+  }
+
+  /**
+   * 元素变更检测是否需要重新计算数据
+   */
+  ngAfterViewChecked(): void {
+    if (this.scrollElement.clientHeight !== this.sourceHeight) {
+      this.initData();
+    }
   }
 
   /**
@@ -75,8 +88,7 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
    * @param event 事件对象
    */
   onMouseWheel(event: WheelEvent): void {
-    let tempScrollTop = this.scrollTop + (event.deltaY > 0 ? this.scrollStep : -this.scrollStep);
-    tempScrollTop = tempScrollTop > this.maxScrollDistance ? this.maxScrollDistance : tempScrollTop < 0 ? 0 : tempScrollTop;
+    const tempScrollTop = this.scrollTop + (event.deltaY > 0 ? this.scrollStep : -this.scrollStep);
     this.setScrollTop(tempScrollTop);
   }
 
@@ -85,9 +97,8 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
    * @param event 事件对象
    */
   scrollBarClick(event: MouseEvent): void {
-    let tempScrollTop = event.offsetY - this.scrollBarHeight / 2;
-    tempScrollTop = tempScrollTop > (this.maxHeight - this.scrollBarHeight) ? (this.maxHeight - this.scrollBarHeight)
-                                                                            : tempScrollTop < 0 ? 0 : tempScrollTop;
+    event.stopPropagation();
+    const tempScrollTop = event.offsetY - this.scrollBarHeight / 2;
     this.setScrollBarScrollTop(tempScrollTop);
   }
 
@@ -96,7 +107,9 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
    * @param value 滚动的位置
    */
   setScrollTop (value: number) {
-    this.scrollTop = value;
+    let tempValue = value;
+    tempValue = tempValue > this.maxScrollDistance ? this.maxScrollDistance : tempValue < 0 ? 0 : tempValue;
+    this.scrollTop = tempValue;
     const scrollDistancePercent = this.scrollTop / (this.maxScrollDistance +
                                                    (this.maxScrollDistance *
                                                    (this.scrollBarHeight / (this.maxHeight - this.scrollBarHeight))));
@@ -108,11 +121,17 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
    * @param value 滚动的位置
    */
   setScrollBarScrollTop (value: number) {
-    this.scrollBarScrollTop = value;
+    let tempValue = value;
+    tempValue = tempValue > (this.maxHeight - this.scrollBarHeight) ? (this.maxHeight - this.scrollBarHeight)
+                                                                    : tempValue < 0 ? 0 : tempValue;
+    this.scrollBarScrollTop = tempValue;
     const scrollDistancePercent = this.scrollBarScrollTop / (this.maxHeight - this.scrollBarHeight +
                                                             (this.maxHeight - this.scrollBarHeight) *
                                                             (this.maxHeight / this.maxScrollDistance));
     this.scrollTop = scrollDistancePercent * this.sourceHeight;
   }
 
+  setDefaultScrollLocation (value: number) {
+    this.defaultScrollLocation = value;
+  }
 }

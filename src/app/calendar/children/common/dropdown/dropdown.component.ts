@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ListData } from '../../../calendar.type';
+import { MinScrollBarComponent } from '../min-scroll-bar/min-scroll-bar.component';
 
 @Component({
   selector: 'app-dropdown',
@@ -9,8 +10,10 @@ import { ListData } from '../../../calendar.type';
 export class DropdownComponent implements OnInit {
 
   @Input() width = 80; // 默认宽度
+  @Input() display = 'inline-block'; // 元素display值
   @Input() listData: ListData[]; // 选项数据数组
   @Input() maxHeight: number; // 下拉最大高度
+  @ViewChild(MinScrollBarComponent) minScrollBarComponent: MinScrollBarComponent; // 指向滚动条组件
 
   private _selectValue; // 选择的值
   @Input()
@@ -25,6 +28,8 @@ export class DropdownComponent implements OnInit {
   @Output() selectValueChange = new EventEmitter<string>();
 
   dropdownListShow = false; // 是否显示下拉菜单
+
+  private liHeight = 24;
 
   constructor() { }
 
@@ -53,6 +58,13 @@ export class DropdownComponent implements OnInit {
   showDropdownList(event: MouseEvent): void {
     event.stopPropagation();
     this.dropdownListShow = true;
+    let tempScrollTop = 0;
+    this.listData.forEach((e, i) => {
+      if (e.value === this.selectValue) {
+        tempScrollTop = i * this.liHeight;
+      }
+    });
+    this.minScrollBarComponent.setDefaultScrollLocation(tempScrollTop);
   }
 
 }

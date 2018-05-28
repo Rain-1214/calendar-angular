@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ListData } from '../../calendar.type';
+import { ListData, DateTableData } from '../../calendar.type';
 import { LunarCalendarDataService } from '../../service/lunarCalendarData.service';
 
 @Component({
@@ -12,15 +12,19 @@ export class CalendarDetailWrapperComponent implements OnInit {
   currentYear: number;
   yearListData: ListData[];
 
+  currentMonth: number;
+  monthListData: ListData[];
+
+
   constructor(
     private lunarCalendarDataService: LunarCalendarDataService
   ) { }
 
   ngOnInit() {
-    this.initData();
+    this.initSelectDate();
   }
 
-  initData(): void {
+  initSelectDate(): void {
     const currentDate = new Date();
     this.currentYear = currentDate.getFullYear();
     const scopeOfYear = this.lunarCalendarDataService.getScopeOfLunarYear();
@@ -31,6 +35,20 @@ export class CalendarDetailWrapperComponent implements OnInit {
         value: i
       });
     }
+    this.currentMonth = currentDate.getMonth() + 1;
+    this.monthListData = [];
+    for (let i = 1; i <= 12; i++) {
+      this.monthListData.push({
+        label: `${i}月`,
+        value: i
+      });
+    }
+  }
+
+  resetDate (): void {
+    const currentDate = new Date();
+    this.currentYear = currentDate.getFullYear();
+    this.currentMonth = currentDate.getMonth() + 1;
   }
 
 }

@@ -6,6 +6,7 @@ import { CalendarDetailWrapperComponent } from './children/calendar-detail-wrapp
 import { ScheduleWrapperComponent } from './children/schedule-wrapper/schedule-wrapper.component';
 import { DropdownComponent } from './children/common/dropdown/dropdown.component';
 import { MinScrollBarComponent } from './children/common/min-scroll-bar/min-scroll-bar.component';
+import { CalendarBodyComponent } from './children/calendar-detail-wrapper/children/calendar-body/calendar-body.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { MinScrollBarComponent } from './children/common/min-scroll-bar/min-scro
     CalendarDetailWrapperComponent,
     ScheduleWrapperComponent,
     DropdownComponent,
-    MinScrollBarComponent
+    MinScrollBarComponent,
+    CalendarBodyComponent
   ],
   providers: [LunarCalendarDataService],
   exports: [CalendarComponent]
