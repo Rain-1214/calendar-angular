@@ -1,9 +1,10 @@
-$text-red: #e02d2d;
+@import '../../../../assets/sass/_variable.scss';
 
 table{
   width: 100%;
+  border-spacing: 0;
   .text-red{
-    color: $text-red;
+    color: $text-color-red;
   }
   tr{
     th{
@@ -11,7 +12,48 @@ table{
       padding: 6px 0;
     }
     td{
-      border-top: 1px solid #c8cacc;
+      border-top: 1px solid $border-color-gray-dark;
+      text-align: center;
+      margin: 0;
+      .day-wrapper{
+        box-sizing: border-box;
+        padding: 6px 3px;
+        display: block;
+        border: 3px solid transparent;
+        cursor: pointer;
+        &.isNotInCurrentMonth{
+          color: $text-color-gray-dark !important;
+          .lunar-text{
+            color: $text-color-gray-dark !important;
+          }
+        }
+        &.active{
+          border-color: $border-color-orange;
+        }
+        &.isWeekend{
+          color: $text-color-red;
+        }
+        &.today{
+          background: $bg-color-orange;
+          color: $text-color-white;
+          span{
+            color: $text-color-white;
+          }
+        }
+        &:hover{
+          border-color: $border-color-orange;
+        }
+        span{
+          display: block;
+        }
+        .number{
+          font-size: 18px;
+        }
+        .lunar-text{
+          color: $text-color-gray-darken;
+          font-size: 12px;
+        }
+      }
     }
   }
 }

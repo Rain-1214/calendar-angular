@@ -1,5 +1,7 @@
+@import './assets/sass/_variable.scss';
+
 .calendar-wrapper {
-  border: 2px solid #57abff;
+  border: 2px solid $border-color-blue-light;
   display: flex;
   .calendar-detail-wrapper{
     flex: 0 1 75%;

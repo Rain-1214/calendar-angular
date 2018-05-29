@@ -9,8 +9,18 @@
       <th class="text-red">六</th>
       <th class="text-red">七</th>
     </tr>
-    <tr>
-      <td>1</td>
+    <tr *ngFor="let date of dateTableData; let i=index">
+      <td *ngFor="let item of date; let i=index">
+        <div class="day-wrapper"
+            [class.active]="checkActive(item)"
+            [class.today]="checkToday(item) && !item.isNotInCurrentMonth"
+            [class.isWeekend]="item.isWeekend"
+            [class.isNotInCurrentMonth]="item.isNotInCurrentMonth"
+            (click)="selectDayEvent(item)">
+          <span class="number">{{ item.day }}</span>
+          <span class="lunar-text">{{ item.lunarDayStr }}</span>
+        </div>
+      </td>
     </tr>
   </table>
 </div>

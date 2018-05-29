@@ -1,14 +1,11 @@
-$blue: #388bff;
-$gray-background: #f0f0f0;
-$gray-border: #d8d8d8;
-$gray-dark-border: #c7c7c7;
+@import '../../assets/sass/_variable.scss';
 
 .wrapper{
   padding: 10px;
   .header {
     display: flex;
     padding-bottom: 10px;
-    border-bottom: 1px solid $blue;
+    border-bottom: 1px solid $border-color-blue;
     >div{
       margin-right: 10px;
     }
@@ -20,16 +17,16 @@ $gray-dark-border: #c7c7c7;
   height: 26px;
   line-height: 26px;
   text-align: center;
-  background: $gray-background;
+  background: $bg-color-gray;
   outline: none;
   border: none;
   padding: 0 10px;
-  border: 1px solid $gray-border;
+  border: 1px solid $border-color-gray;
   cursor: pointer;
   &:active{
-    box-shadow: inset 1px 1px 1px $gray-dark-border;
+    box-shadow: inset 1px 1px 1px $border-color-gray-dark;
   }
   &:hover{
-    border-color: #388bff;
+    border-color: $border-color-blue;
   }
 }

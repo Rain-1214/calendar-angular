@@ -15,6 +15,7 @@
     </div>
   </div>
   <div class="body">
-    <app-calendar-body></app-calendar-body>
+    <app-calendar-body [(year)]="currentYear" [(month)]="currentMonth"
+                       (selectDayChange)="selectDayChange($event)"></app-calendar-body>
   </div>
 </div>

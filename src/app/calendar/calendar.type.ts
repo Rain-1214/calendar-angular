@@ -16,8 +16,11 @@ export interface ListData {
 
 
 export interface DateTableData {
+  year: number;
+  month: number;
   day: number;
   lunarDay: number;
   lunarDayStr: string;
   isWeekend: boolean;
+  isNotInCurrentMonth: boolean;
 }

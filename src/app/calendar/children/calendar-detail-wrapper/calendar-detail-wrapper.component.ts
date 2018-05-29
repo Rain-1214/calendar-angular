@@ -15,6 +15,8 @@ export class CalendarDetailWrapperComponent implements OnInit {
   currentMonth: number;
   monthListData: ListData[];
 
+  currentDay: number;
+
 
   constructor(
     private lunarCalendarDataService: LunarCalendarDataService
@@ -49,6 +51,11 @@ export class CalendarDetailWrapperComponent implements OnInit {
     const currentDate = new Date();
     this.currentYear = currentDate.getFullYear();
     this.currentMonth = currentDate.getMonth() + 1;
+  }
+
+  selectDayChange(selectDay: number): void {
+    this.currentDay = selectDay;
+    console.log(selectDay);
   }
 
 }

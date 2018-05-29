@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { DateTableData, LunarData } from '../../../../calendar.type';
 import { LunarCalendarDataService } from '../../../../service/lunarCalendarData.service';
 
@@ -7,9 +7,49 @@ import { LunarCalendarDataService } from '../../../../service/lunarCalendarData.
   templateUrl: './calendar-body.component.html',
   styleUrls: ['./calendar-body.component.scss']
 })
-export class CalendarBodyComponent implements OnInit {
+export class CalendarBodyComponent implements OnInit, OnChanges {
 
   dateTableData: Array<Array<DateTableData>>;
+  private dateTableDataCache: {[key: string]: Array<Array<DateTableData>>} = {};
+  private _year: number;
+  private _month: number;
+  private _day: number;
+  private today = new Date();
+
+  @Input()
+  set year(value: number) {
+    this._year = value;
+    this.yearChange.emit(value);
+  }
+
+  get year() {
+    return this._year;
+  }
+
+  @Input()
+  set month(value: number) {
+    this._month = value;
+    this.monthChange.emit(value);
+  }
+
+  get month() {
+    return this._month;
+  }
+
+  @Input()
+  set day(value: number) {
+    this._day = value;
+  }
+
+  get day() {
+    return this._day;
+  }
+
+  @Input() showToday = true;
+
+  @Output() monthChange = new EventEmitter<number>();
+  @Output() yearChange = new EventEmitter<number>();
+  @Output() dayChange = new EventEmitter<number>();
 
   constructor(
     private lunarCalendarDataService: LunarCalendarDataService
@@ -17,35 +57,69 @@ export class CalendarBodyComponent implements OnInit {
 
   ngOnInit() {
     const date = new Date();
-    this.createDate(date.getFullYear(), date.getMonth() + 1);
+    this.createDate(this.year || date.getFullYear(), this.month || date.getMonth() + 1);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ((changes.year && changes.year.currentValue !== changes.year.previousValue) ||
+        (changes.month && changes.month.currentValue !== changes.month.previousValue)) {
+      this.createDate(this.year, this.month);
+    }
   }
 
   createDate(year: number, month: number): void {
+    if (Object.prototype.hasOwnProperty.call(this.dateTableDataCache, `${year}${month}`)) {
+      this.dateTableData = this.dateTableDataCache[`${year}${month}`];
+      return;
+    }
     const currentMonthFirstDayDate = new Date(year, month - 1, 1); // 当前月一号日期对象
-    const currentMonthFirstDayWeek = currentMonthFirstDayDate.getDay(); // 当前月一号星期几
+    let currentMonthFirstDayWeek = currentMonthFirstDayDate.getDay(); // 当前月一号星期几
+    currentMonthFirstDayWeek = currentMonthFirstDayWeek === 0 ? 7 : currentMonthFirstDayWeek;
     const currentMonthDaysNum = new Date(year, month, 0).getDate(); // 当前月一共几天
-    const currentMonthLastDayWeek = new Date(year, month - 1, currentMonthDaysNum).getDay(); // 当前月最后一天星期几
-
-    // 计算上个月最后显示的几天和下个月显示出的前几天 这个月一共的天数
+    const currentMonthLastDayDate = new Date(year, month - 1, currentMonthDaysNum); // 当前月最后一天日期对象
+    let currentMonthLastDayWeek = currentMonthLastDayDate.getDay();
+    currentMonthLastDayWeek = currentMonthLastDayWeek === 0 ? 7 : currentMonthLastDayWeek;
+    // 计算上个月最后显示的几天和下个月显示的前几天 这个月一共的天数
     const sumDays = (currentMonthFirstDayWeek - 1) + currentMonthDaysNum + (7 - currentMonthLastDayWeek);
     // 初始化月份数据表格
     this.dateTableData = new Array(sumDays / 7);
     // 获取这个月的阴历数据
-    const lunarDateData = this.lunarCalendarDataService.getLunarMonthAndDay(year, month, 1);
+    let lunarDateData = this.lunarCalendarDataService.getLunarMonthAndDay(year, month, 1);
+
     this.addPrevMonthDate(currentMonthFirstDayDate);
     let lunarDay = lunarDateData.day;
-    for (let i = 0, y = 1; i <= this.dateTableData.length; i++) {
-      lunarDay++;
+    let week = currentMonthFirstDayWeek;
+    for (let i = 0, y = 1; i < this.dateTableData.length; i++) {
       if (!this.dateTableData[i]) {
         this.dateTableData[i] = [];
       }
-      this.dateTableData[i].push({
-        day: y++,
-        lunarDay: lunarDay,
-        lunarDayStr: this.lunarCalendarDataService.translateDayNumToCalendarStr(lunarDay),
-        isWeekend: false
-      });
+      while (this.dateTableData[i].length < 7) {
+        this.dateTableData[i].push({
+          year,
+          month: month,
+          day: y,
+          lunarDay: lunarDay,
+          lunarDayStr: this.lunarCalendarDataService.translateDayNumToCalendarStr(lunarDay),
+          isWeekend: week >= 6,
+          isNotInCurrentMonth: false,
+        });
+        y++;
+        lunarDay++;
+        week++;
+        if (week > 7) {
+          week = 1;
+        }
+        if (lunarDay >= lunarDateData.currentMonthDaysNum) {
+          lunarDateData = this.lunarCalendarDataService.getLunarMonthAndDay(year, month, y);
+          lunarDay = lunarDateData.day;
+        }
+        if (y > currentMonthDaysNum) {
+          break;
+        }
+      }
     }
+    this.addNextMonthDate(currentMonthLastDayDate);
+    this.dateTableDataCache[`${year}${month}`] = this.dateTableData;
   }
 
   /**
@@ -53,28 +127,105 @@ export class CalendarBodyComponent implements OnInit {
    * @param monthFirstDayDate 这个月一号的Date对象
    */
   addPrevMonthDate (monthFirstDayDate: Date): void {
-    const currentMonthFirstWeek = monthFirstDayDate.getDay();
-    const lunarMonthDate = this.lunarCalendarDataService.getLunarMonthAndDay(monthFirstDayDate.getFullYear(),
-                                                                             monthFirstDayDate.getMonth() + 1,
-                                                                             monthFirstDayDate.getDate());
+    const tempWeek = monthFirstDayDate.getDay();
+    const currentMonthFirstWeek = tempWeek === 0 ? 7 : tempWeek;
     const prevMonthDate = new Date(monthFirstDayDate.getFullYear(), monthFirstDayDate.getMonth(), 0);
     if (currentMonthFirstWeek !== 1) {
       const prevLunarMonthDate = this.lunarCalendarDataService.getLunarMonthAndDay(prevMonthDate.getFullYear(),
                                                                                    prevMonthDate.getMonth() + 1,
                                                                                    prevMonthDate.getDate());
       const firstWeek = this.dateTableData[0] = [];
-      let lunarDay = lunarMonthDate.day - 1;
-      for (let i = prevMonthDate.getDate(); i > (prevMonthDate.getDate() - currentMonthFirstWeek + 1); i--) {
-        lunarDay = lunarDay > 0 ? lunarDay-- : (lunarDay = prevLunarMonthDate.day, prevLunarMonthDate.day);
+      let lunarDay = prevLunarMonthDate.day;
+      let week = prevMonthDate.getDay();
+      week = week === 0 ? 7 : week;
+      const month = prevMonthDate.getMonth() + 1;
+      const year = prevMonthDate.getFullYear();
+      for (let i = prevMonthDate.getDate(); i > (prevMonthDate.getDate() - currentMonthFirstWeek + 1); i--, lunarDay--, week--) {
+        if (lunarDay <= 0) {
+          lunarDay = this.lunarCalendarDataService.getLunarMonthAndDay(prevMonthDate.getFullYear(),
+                                                                       prevMonthDate.getMonth() + 1,
+                                                                       i).day;
+        }
         firstWeek.unshift({
+          year,
+          month,
           day: i,
           lunarDay: lunarDay,
           lunarDayStr: this.lunarCalendarDataService.translateDayNumToCalendarStr(lunarDay),
-          isWeekend: new Date(prevMonthDate.getFullYear(), prevMonthDate.getMonth(), i).getDay() >= 6
+          isWeekend: week >= 6,
+          isNotInCurrentMonth: true
         });
       }
     }
   }
 
+  /**
+   * 在月份对象中添加下一个月需要显示的前几天日期
+   * @param monthLastDayDate 月份最后一天日期对象
+   */
+  addNextMonthDate (monthLastDayDate: Date): void {
+    const tempWeek = monthLastDayDate.getDay();
+    const currentMonthLastDayWeek = tempWeek === 0 ? 7 : tempWeek;
+    const nextMonthDate = new Date(monthLastDayDate.getFullYear(), monthLastDayDate.getMonth(), monthLastDayDate.getDate() + 1);
+    if (currentMonthLastDayWeek !== 7) {
+      const nextLunarMonthDate = this.lunarCalendarDataService.getLunarMonthAndDay(nextMonthDate.getFullYear(),
+                                                                                   nextMonthDate.getMonth() + 1,
+                                                                                   nextMonthDate.getDate());
+      const lastWeek = this.dateTableData[this.dateTableData.length - 1];
+      const month = nextMonthDate.getMonth() + 1;
+      const year = nextMonthDate.getFullYear();
+      let week = nextMonthDate.getDay();
+      week = week === 0 ? 7 : week;
+      let lunarDay = nextLunarMonthDate.day;
+      for (let i = nextMonthDate.getDate(); i <= (7 - currentMonthLastDayWeek); i++, lunarDay++, week++) {
+        if (lunarDay > nextLunarMonthDate.currentMonthDaysNum) {
+          lunarDay = this.lunarCalendarDataService.getLunarMonthAndDay(nextMonthDate.getFullYear(),
+                                                                       nextMonthDate.getMonth() + 1,
+                                                                       i).day;
+        }
+        lastWeek.push({
+          year,
+          month,
+          day: i,
+          lunarDay: lunarDay,
+          lunarDayStr: this.lunarCalendarDataService.translateDayNumToCalendarStr(lunarDay),
+          isWeekend: week >= 6,
+          isNotInCurrentMonth: true
+        });
+      }
+    }
+  }
 
+  checkToday(item: DateTableData): boolean {
+    if (this.showToday) {
+      return item.month === this.today.getMonth() + 1 && item.day === this.today.getDate() && this.year === this.today.getFullYear();
+    } else {
+      return false;
+    }
+  }
+
+  checkActive(item: DateTableData): boolean {
+    if (!this.day) {
+      return false;
+    }
+    return item.month === this.month && item.day === this.day && item.year === this.year;
+  }
+
+  selectDayEvent(item: DateTableData) {
+    if (item.month !== this.month) {
+      this.month = item.month;
+      if (item.month === 12) {
+        this.year--;
+      }
+      if (item.month === 1) {
+        this.year++;
+      }
+    }
+    const selectDay = {
+      year: this.year,
+      month: this.month,
+      day: item.day
+    };
+    this.day = item.day;
+  }
 }

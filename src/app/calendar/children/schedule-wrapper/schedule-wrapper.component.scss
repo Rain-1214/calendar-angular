@@ -1,0 +1,8 @@
+@import '../../assets/sass/_variable.scss';
+
+.schedule-wrapper{
+  box-sizing: border-box;
+  height: 100%;
+  border-left: 2px solid $border-color-blue-light;
+  padding: 10px 5px;
+}
