@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ListData, DateTableData } from '../../calendar.type';
 import { LunarCalendarDataService } from '../../service/lunarCalendarData.service';
+import { MissionService } from '../../service/mission.service';
 
 @Component({
   selector: 'app-calendar-detail-wrapper',
@@ -9,17 +10,43 @@ import { LunarCalendarDataService } from '../../service/lunarCalendarData.servic
 })
 export class CalendarDetailWrapperComponent implements OnInit {
 
-  currentYear: number;
   yearListData: ListData[];
-
-  currentMonth: number;
   monthListData: ListData[];
 
-  currentDay: number;
+  _currentYear: number;
+  _currentMonth: number;
+  _currentDay: number;
 
+  set currentYear (value: number) {
+    this._currentYear = value;
+  }
+
+  get currentYear () {
+    return this._currentYear;
+  }
+
+  set currentMonth (value: number) {
+    this._currentMonth = value;
+  }
+
+  get currentMonth () {
+    return this._currentMonth;
+  }
+
+  set currentDay (value: number) {
+    if (value) {
+      this.missionService.announcedMission({year: this.currentYear, month: this.currentMonth, day: value});
+    }
+    this._currentDay = value;
+  }
+
+  get currentDay () {
+    return this._currentDay;
+  }
 
   constructor(
-    private lunarCalendarDataService: LunarCalendarDataService
+    private lunarCalendarDataService: LunarCalendarDataService,
+    private missionService: MissionService
   ) { }
 
   ngOnInit() {
@@ -51,11 +78,6 @@ export class CalendarDetailWrapperComponent implements OnInit {
     const currentDate = new Date();
     this.currentYear = currentDate.getFullYear();
     this.currentMonth = currentDate.getMonth() + 1;
-  }
-
-  selectDayChange(selectDay: number): void {
-    this.currentDay = selectDay;
-    console.log(selectDay);
   }
 
 }

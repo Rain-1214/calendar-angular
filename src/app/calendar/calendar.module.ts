@@ -7,6 +7,7 @@ import { ScheduleWrapperComponent } from './children/schedule-wrapper/schedule-w
 import { DropdownComponent } from './children/common/dropdown/dropdown.component';
 import { MinScrollBarComponent } from './children/common/min-scroll-bar/min-scroll-bar.component';
 import { CalendarBodyComponent } from './children/calendar-detail-wrapper/children/calendar-body/calendar-body.component';
+import { MissionService } from './service/mission.service';
 
 @NgModule({
   imports: [
@@ -20,7 +21,7 @@ import { CalendarBodyComponent } from './children/calendar-detail-wrapper/childr
     MinScrollBarComponent,
     CalendarBodyComponent
   ],
-  providers: [LunarCalendarDataService],
+  providers: [LunarCalendarDataService, MissionService],
   exports: [CalendarComponent]
 })
 export class CalendarModule { }

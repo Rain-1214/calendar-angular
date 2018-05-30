@@ -10,12 +10,9 @@ export class CalendarComponent implements OnInit {
 
   @Input() width = 550;
 
-  constructor(
-    private lunarCalendarDataServer: LunarCalendarDataService
-  ) { }
+  constructor() { }
 
   ngOnInit() {
-    this.lunarCalendarDataServer.getLunarMonthAndDay(1901, 2, 19);
   }
 
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MissionService } from '../../service/mission.service';
 
 @Component({
   selector: 'app-schedule-wrapper',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScheduleWrapperComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private missionService: MissionService
+  ) { }
 
   ngOnInit() {
+    this.missionService.missionAnnounced$.subscribe(res => {
+      console.log(res);
+    });
   }
 
 }

@@ -11,11 +11,10 @@
                     [listData]="monthListData"></app-dropdown>
     </div>
     <div>
-      <button class="btn" (click)="resetDate()">返回今日</button>
+      <button class="btn" (click)="resetDate()">返回今日</button>{{currentDay}}
     </div>
   </div>
   <div class="body">
-    <app-calendar-body [(year)]="currentYear" [(month)]="currentMonth"
-                       (selectDayChange)="selectDayChange($event)"></app-calendar-body>
+    <app-calendar-body [(year)]="currentYear" [(month)]="currentMonth" [(day)]="currentDay"></app-calendar-body>
   </div>
 </div>

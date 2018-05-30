@@ -38,7 +38,9 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
 
   @Input()
   set day(value: number) {
+    console.log(value);
     this._day = value;
+    this.dayChange.emit(value);
   }
 
   get day() {
@@ -67,6 +69,11 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * 创建一个年月对应的月份数据表
+   * @param year 获取的年
+   * @param month 获取的月份
+   */
   createDate(year: number, month: number): void {
     if (Object.prototype.hasOwnProperty.call(this.dateTableDataCache, `${year}${month}`)) {
       this.dateTableData = this.dateTableDataCache[`${year}${month}`];
@@ -196,14 +203,22 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * 检测这个日期是否是今天
+   * @param item 一个日期信息
+   */
   checkToday(item: DateTableData): boolean {
     if (this.showToday) {
-      return item.month === this.today.getMonth() + 1 && item.day === this.today.getDate() && this.year === this.today.getFullYear();
+      return item.month === this.today.getMonth() + 1 && item.day === this.today.getDate() && item.year === this.today.getFullYear();
     } else {
       return false;
     }
   }
 
+  /**
+   * 判断是否是选中的日期
+   * @param item 一个日期的信息
+   */
   checkActive(item: DateTableData): boolean {
     if (!this.day) {
       return false;
@@ -211,21 +226,18 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
     return item.month === this.month && item.day === this.day && item.year === this.year;
   }
 
+  /**
+   * 选择一个日期
+   * @param item 一个日期信息
+   */
   selectDayEvent(item: DateTableData) {
+    console.log(item);
     if (item.month !== this.month) {
       this.month = item.month;
-      if (item.month === 12) {
-        this.year--;
-      }
-      if (item.month === 1) {
-        this.year++;
-      }
     }
-    const selectDay = {
-      year: this.year,
-      month: this.month,
-      day: item.day
-    };
+    if (item.year !== this.year) {
+      this.year = item.year;
+    }
     this.day = item.day;
   }
 }

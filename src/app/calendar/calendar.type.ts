@@ -7,6 +7,7 @@ export interface LunarData {
   currentMonthDaysNum: number;
   isLeapMonth: boolean;
   isLeapYear: boolean;
+  chineseEra: ChineseEra;
 }
 
 export interface ListData {
@@ -23,4 +24,17 @@ export interface DateTableData {
   lunarDayStr: string;
   isWeekend: boolean;
   isNotInCurrentMonth: boolean;
+}
+
+export interface SelectDate {
+  year: number;
+  month: number;
+  day: number;
+}
+
+export interface ChineseEra {
+  heavenlyStems: number;
+  earthlyBranches: number;
+  era: string;
+  chineseZodiacAnimal: string;
 }

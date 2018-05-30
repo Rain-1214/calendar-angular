@@ -1,6 +1,6 @@
 // tslint:disable:no-bitwise
 import { Injectable } from '@angular/core';
-import { LunarData } from '../calendar.type';
+import { LunarData, ChineseEra } from '../calendar.type';
 import { CalendarModule } from '../calendar.module';
 
 @Injectable()
@@ -36,6 +36,9 @@ export class LunarCalendarDataService {
     30: '三十',
   };
 
+  public heavenlyStems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+  public earthlyBranches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+  public chineseZodiacAnimal = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
   /**
    * 1、1899年-2051年 阴历每月天数和闰月信息;
    * 2、16进制数要将其转换成2进制 并在高位补0至17位，数据为了不使高位0丢失所以在最前一位补了无意义的1(一共18位)，删除后剩余17位如下;
@@ -69,6 +72,12 @@ export class LunarCalendarDataService {
    */
   private fromLunarDateSecondes = new Date(1899, 1, 10).getTime();
   private firstDateYear = 1899;
+  private firstDateYearEra: ChineseEra = {
+    heavenlyStems: 5,
+    earthlyBranches: 11,
+    era: '己亥',
+    chineseZodiacAnimal: '猪',
+  };
   private safetyStartYear = 1900;
   private safetyEndYear = 2050;
   private dataCache: { [key: string]: LunarData } = {};
@@ -86,8 +95,6 @@ export class LunarCalendarDataService {
    *    day: number; 阴历日号数值 => 23
    *    dayStr: string; 阴历日号翻译成汉字的日号字符串 => 廿三
    *    currentMonthDaysNum: number; 当前阴历月份一共有多少天
-   *    prevMonthDaysNum: number; 当前阴历月份上一个月有多少天
-   *    nextMonthDaysNum: number; 当前阴历月份下一个月有多少天
    *    isLeapMonth: boolean; 当前月份是否是闰月
    *    isLeapYear: boolean; 当前阴历年是否是闰年
    * }
@@ -101,6 +108,9 @@ export class LunarCalendarDataService {
     }
     const currentDate = new Date(year, month - 1, day);
     let betweenDays = (currentDate.getTime() - this.fromLunarDateSecondes) / 1000 / 60 / 60 / 24 + 1;
+    betweenDays = Math.floor(betweenDays);
+    let heavenlyStems = this.firstDateYearEra.heavenlyStems;
+    let earthlyBranches = this.firstDateYearEra.earthlyBranches;
     let isLeapMonth = false,
         isLeapYear;
     let lunarMonth = 0,
@@ -112,6 +122,14 @@ export class LunarCalendarDataService {
       if (betweenDays > tempYearDays) {
         betweenDays -= tempYearDays;
         lunarYear++;
+        earthlyBranches++;
+        if (earthlyBranches > 11) {
+          earthlyBranches = 0;
+          heavenlyStems++;
+        }
+        if (heavenlyStems > 11) {
+          heavenlyStems = 0;
+        }
       } else if (betweenDays > 30) {
         for (let i = isLeapYear ? 12 : 11; i >= 0; i--) {
           const monthDayNum = ((this.lunarCalendarData[lunarYear - this.firstDateYear] & (1 << i)) >> i) === 1 ? 30 : 29;
@@ -136,7 +154,7 @@ export class LunarCalendarDataService {
         break;
       }
     }
-    const result = {
+    const result: LunarData = {
       month: lunarMonth,
       monthStr: this.lunarMonthNumberToStrData[lunarMonth],
       day: betweenDays,
@@ -144,6 +162,12 @@ export class LunarCalendarDataService {
       currentMonthDaysNum: currentMonthDaysNum,
       isLeapMonth,
       isLeapYear,
+      chineseEra: {
+        heavenlyStems,
+        earthlyBranches,
+        era: `${this.heavenlyStems[heavenlyStems]}${this.earthlyBranches[earthlyBranches]}`,
+        chineseZodiacAnimal: `${this.chineseZodiacAnimal[earthlyBranches]}`
+      }
     };
     this.dataCache[`${year}${month}${day}`] = result;
     return result;

@@ -37,7 +37,8 @@ export class DropdownComponent implements OnInit {
    * 定义全局关闭下拉菜单时间
    */
   ngOnInit() {
-    window.addEventListener('click', () => {
+    window.addEventListener('click', (event: MouseEvent) => {
+      event.stopPropagation();
       this.dropdownListShow = false;
     });
   }
