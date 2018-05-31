@@ -16,7 +16,7 @@
             [class.today]="checkToday(item) && !item.isNotInCurrentMonth"
             [class.isWeekend]="item.isWeekend"
             [class.isNotInCurrentMonth]="item.isNotInCurrentMonth"
-            (click)="selectDayEvent(item)">
+            (click)="selectDayEvent(item, $event)">
           <span class="number">{{ item.day }}</span>
           <span class="lunar-text">{{ item.lunarDayStr }}</span>
         </div>

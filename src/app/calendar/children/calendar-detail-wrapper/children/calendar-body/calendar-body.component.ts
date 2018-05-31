@@ -9,44 +9,12 @@ import { LunarCalendarDataService } from '../../../../service/lunarCalendarData.
 })
 export class CalendarBodyComponent implements OnInit, OnChanges {
 
-  dateTableData: Array<Array<DateTableData>>;
   private dateTableDataCache: {[key: string]: Array<Array<DateTableData>>} = {};
-  private _year: number;
-  private _month: number;
-  private _day: number;
   private today = new Date();
-
-  @Input()
-  set year(value: number) {
-    this._year = value;
-    this.yearChange.emit(value);
-  }
-
-  get year() {
-    return this._year;
-  }
-
-  @Input()
-  set month(value: number) {
-    this._month = value;
-    this.monthChange.emit(value);
-  }
-
-  get month() {
-    return this._month;
-  }
-
-  @Input()
-  set day(value: number) {
-    console.log(value);
-    this._day = value;
-    this.dayChange.emit(value);
-  }
-
-  get day() {
-    return this._day;
-  }
-
+  dateTableData: Array<Array<DateTableData>>;
+  @Input() year: number;
+  @Input() month: number;
+  @Input() day: number;
   @Input() showToday = true;
 
   @Output() monthChange = new EventEmitter<number>();
@@ -231,13 +199,15 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
    * @param item 一个日期信息
    */
   selectDayEvent(item: DateTableData) {
-    console.log(item);
     if (item.month !== this.month) {
       this.month = item.month;
+      this.monthChange.emit(this.month);
     }
     if (item.year !== this.year) {
       this.year = item.year;
+      this.yearChange.emit(this.year);
     }
     this.day = item.day;
+    this.dayChange.emit(this.day);
   }
 }

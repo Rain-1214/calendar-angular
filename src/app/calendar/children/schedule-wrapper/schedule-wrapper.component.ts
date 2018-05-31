@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MissionService } from '../../service/mission.service';
+import { SelectDate, LunarData } from '../../calendar.type';
+import { LunarCalendarDataService } from '../../service/lunarCalendarData.service';
 
 @Component({
   selector: 'app-schedule-wrapper',
@@ -8,14 +10,47 @@ import { MissionService } from '../../service/mission.service';
 })
 export class ScheduleWrapperComponent implements OnInit {
 
+  private _currentDay: SelectDate;
+  private currentDayLunarCalendar: LunarData;
+  private currentDate: Date;
+  private chineseWeek = ['日', '一', '二', '三', '四', '五', '六'];
+
+  set currentDay(value: SelectDate) {
+    this._currentDay = value;
+    this.initData();
+  }
+
+  get currentDay() {
+    return this._currentDay;
+  }
+
+  @Input() scheduleList: any;
+
   constructor(
-    private missionService: MissionService
+    private missionService: MissionService,
+    private lunarCalendarDataService: LunarCalendarDataService
   ) { }
 
   ngOnInit() {
     this.missionService.missionAnnounced$.subscribe(res => {
-      console.log(res);
+      this.currentDay = res;
     });
+    const today = new Date();
+    this.currentDay = {
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      day: today.getDate()
+    };
+  }
+
+  initData() {
+    this.initCurrentLunarDay();
+    this.currentDate = new Date(this.currentDay.year, this.currentDay.month - 1, this.currentDay.day);
+  }
+
+  initCurrentLunarDay () {
+    this.currentDayLunarCalendar = this.lunarCalendarDataService
+                                       .getLunarMonthAndDay(this.currentDay.year, this.currentDay.month, this.currentDay.day);
   }
 
 }

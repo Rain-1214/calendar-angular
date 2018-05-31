@@ -72,6 +72,7 @@ export class CalendarDetailWrapperComponent implements OnInit {
         value: i
       });
     }
+    this.currentDay = currentDate.getDate();
   }
 
   resetDate (): void {

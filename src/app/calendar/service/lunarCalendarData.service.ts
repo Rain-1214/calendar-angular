@@ -123,9 +123,9 @@ export class LunarCalendarDataService {
         betweenDays -= tempYearDays;
         lunarYear++;
         earthlyBranches++;
+        heavenlyStems++;
         if (earthlyBranches > 11) {
           earthlyBranches = 0;
-          heavenlyStems++;
         }
         if (heavenlyStems > 11) {
           heavenlyStems = 0;

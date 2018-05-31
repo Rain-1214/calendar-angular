@@ -4,9 +4,9 @@
   border: 2px solid $border-color-blue-light;
   display: flex;
   .calendar-detail-wrapper{
-    flex: 0 1 75%;
+    width: 70%;
   }
   .schedule-wrapper {
-    flex: 0 1 25%;
+    width: 30%;
   }
 }
