@@ -34,11 +34,10 @@ export class DropdownComponent implements OnInit {
   constructor() { }
 
   /**
-   * 定义全局关闭下拉菜单时间
+   * 定义全局关闭下拉菜单事件
    */
   ngOnInit() {
-    window.addEventListener('click', (event: MouseEvent) => {
-      event.stopPropagation();
+    document.addEventListener('click', (event: MouseEvent) => {
       this.dropdownListShow = false;
     });
   }
@@ -58,14 +57,16 @@ export class DropdownComponent implements OnInit {
    */
   showDropdownList(event: MouseEvent): void {
     event.stopPropagation();
-    this.dropdownListShow = true;
-    let tempScrollTop = 0;
-    this.listData.forEach((e, i) => {
-      if (e.value === this.selectValue) {
-        tempScrollTop = i * this.liHeight;
-      }
-    });
-    this.minScrollBarComponent.setDefaultScrollLocation(tempScrollTop);
+    this.dropdownListShow = !this.dropdownListShow;
+    if (this.dropdownListShow) {
+      let tempScrollTop = 0;
+      this.listData.forEach((e, i) => {
+        if (e.value === this.selectValue) {
+          tempScrollTop = i * this.liHeight;
+        }
+      });
+      this.minScrollBarComponent.setDefaultScrollLocation(tempScrollTop);
+    }
   }
 
 }

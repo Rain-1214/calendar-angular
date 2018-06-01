@@ -18,6 +18,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
   _currentDay: number;
 
   set currentYear (value: number) {
+    if (value) {
+      this.missionService.announcedMission({year: value, month: this.currentMonth, day: this.currentDay});
+    }
     this._currentYear = value;
   }
 
@@ -26,6 +29,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
   }
 
   set currentMonth (value: number) {
+    if (value) {
+      this.missionService.announcedMission({year: this.currentYear, month: value, day: this.currentDay});
+    }
     this._currentMonth = value;
   }
 

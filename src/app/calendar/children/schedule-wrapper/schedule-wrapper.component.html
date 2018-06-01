@@ -8,7 +8,7 @@
       {{currentDayLunarCalendar.chineseEra.era}}年 {{currentDayLunarCalendar.chineseEra.chineseZodiacAnimal}}年
     </div>
     <div>
-      {{currentDayLunarCalendar.monthStr}}{{currentDayLunarCalendar.dayStr}}
+      {{currentDayLunarCalendar.isLeapMonth ? '闰': ''}}{{currentDayLunarCalendar.monthStr}}{{currentDayLunarCalendar.dayStr}}
     </div>
   </div>
   <div class="list">
@@ -19,5 +19,4 @@
       <li></li>
     </ul>
   </div>
-  {{currentDayLunarCalendar | json}}
 </div>

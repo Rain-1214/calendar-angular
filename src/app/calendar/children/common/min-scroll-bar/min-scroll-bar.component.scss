@@ -8,13 +8,13 @@ $border-color-gray:#e1e1e1;
   position: relative;
   overflow: hidden;
   &.hasScroll{
-    padding-right: 8px;
+    padding-right: 10px;
   }
   .scroll-bar{
     position: absolute;
     top: 0;
     right: 0;
-    width: 8px;
+    width: 10px;
     height: 100%;
     background: $bg-color-gray-light;
     cursor: pointer;
@@ -23,7 +23,7 @@ $border-color-gray:#e1e1e1;
     }
     .bar{
       box-sizing: border-box;
-      width: 6px;
+      width: 8px;
       height: 30px;
       position: absolute;
       top: 0px;

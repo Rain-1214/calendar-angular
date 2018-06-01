@@ -127,7 +127,7 @@ export class LunarCalendarDataService {
         if (earthlyBranches > 11) {
           earthlyBranches = 0;
         }
-        if (heavenlyStems > 11) {
+        if (heavenlyStems > 9) {
           heavenlyStems = 0;
         }
       } else if (betweenDays > 30) {
@@ -144,10 +144,10 @@ export class LunarCalendarDataService {
         lunarMonth = lunarMonth === 0 ? 1 : lunarMonth;
         if (isLeapYear) {
           const currentLeapMonthNum = this.getLeapMonthNum(lunarYear);
-          if (lunarMonth > currentLeapMonthNum + 1) {
-            lunarMonth--;
-          } else if (lunarMonth === lunarMonth + 1) {
+          if (lunarMonth === currentLeapMonthNum + 1) {
             isLeapMonth = true;
+            lunarMonth--;
+          } else if (lunarMonth > currentMonthDaysNum + 1) {
             lunarMonth--;
           }
         }

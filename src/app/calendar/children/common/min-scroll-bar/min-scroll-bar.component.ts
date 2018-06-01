@@ -1,12 +1,12 @@
 import { Component, ViewChildren, ViewChild, AfterViewInit, Input,
-  ElementRef, AfterContentChecked, Output, AfterViewChecked } from '@angular/core';
+  ElementRef, AfterContentChecked, Output, AfterViewChecked, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-min-scroll-bar',
   templateUrl: './min-scroll-bar.component.html',
   styleUrls: ['./min-scroll-bar.component.scss']
 })
-export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked, AfterViewChecked {
+export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked, AfterViewChecked, OnInit {
 
   @ViewChild('wrapper') wrapper: ElementRef<HTMLDivElement>; // 指向包裹元素
   @Input() maxHeight; // 设定的最大高度
@@ -20,6 +20,9 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
   childElementCount: number; // 子元素数量, 用于监听添加或删除新元素重新计算滚动位置
 
   private defaultScrollLocation = 0; // 默认的滚动位置
+  private canMove = false;
+  private barStartLocation = 0;
+  private tempScrollTop = 0;
   private _scrollTop = 0;
   // 元素滚动的位置
   set scrollTop (value: number) {
@@ -51,6 +54,20 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
     }, 0);
   }
 
+  ngOnInit (): void {
+    document.addEventListener('mousemove', (event: MouseEvent) => {
+      event.preventDefault();
+      if (this.canMove) {
+        this.setScrollBarScrollTop(this.tempScrollTop + (event.clientY - this.barStartLocation));
+      }
+    });
+    document.addEventListener('mouseup', (event: MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.canMove = false;
+    });
+  }
+
   /**
    * view初始化之后获取元素
    */
@@ -80,6 +97,16 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
         this.setScrollTop(this.scrollTop);
       }, 0);
     }
+  }
+
+  startMove(event: MouseEvent): void {
+    this.canMove = true;
+    this.barStartLocation = event.clientY;
+    this.tempScrollTop = this.scrollBarScrollTop;
+  }
+
+  endMove(event: MouseEvent): void {
+    this.canMove = false;
   }
 
 
