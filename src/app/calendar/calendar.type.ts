@@ -38,3 +38,10 @@ export interface ChineseEra {
   era: string;
   chineseZodiacAnimal: string;
 }
+
+export interface Schedule {
+  startTime: string;
+  endTimet: string;
+  descriptiong: string;
+  iconColor: string;
+}

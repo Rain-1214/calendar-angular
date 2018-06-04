@@ -9,17 +9,17 @@ import { LunarCalendarDataService } from '../../../../service/lunarCalendarData.
 })
 export class CalendarBodyComponent implements OnInit, OnChanges {
 
-  private dateTableDataCache: {[key: string]: Array<Array<DateTableData>>} = {};
-  private today = new Date();
-  dateTableData: Array<Array<DateTableData>>;
-  @Input() year: number;
-  @Input() month: number;
-  @Input() day: number;
-  @Input() showToday = true;
+  private dateTableDataCache: {[key: string]: Array<Array<DateTableData>>} = {}; // 计算缓存
+  private today = new Date(); // 当前时刻时间对象
+  dateTableData: Array<Array<DateTableData>>; // 月份日历对象
+  @Input() year: number; // 选择的年
+  @Input() month: number; // 选择的月
+  @Input() day: number; // 选择的日
+  @Input() showToday = true; // 是否高亮显示今天
 
-  @Output() monthChange = new EventEmitter<number>();
-  @Output() yearChange = new EventEmitter<number>();
-  @Output() dayChange = new EventEmitter<number>();
+  @Output() monthChange = new EventEmitter<number>(); // 双向绑定年份
+  @Output() yearChange = new EventEmitter<number>(); // 双向绑定月份
+  @Output() dayChange = new EventEmitter<number>(); // 双向绑定日号
 
   constructor(
     private lunarCalendarDataService: LunarCalendarDataService
@@ -198,7 +198,11 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
    * 选择一个日期
    * @param item 一个日期信息
    */
-  selectDayEvent(item: DateTableData) {
+  selectDayEvent(item: DateTableData): void {
+    const { startYear, endYear } = this.lunarCalendarDataService.getScopeOfLunarYear();
+    if (item.year < startYear || item.year > endYear) {
+      return;
+    }
     if (item.month !== this.month) {
       this.month = item.month;
       this.monthChange.emit(this.month);

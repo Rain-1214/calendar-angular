@@ -9,7 +9,7 @@
     <app-min-scroll-bar [maxHeight]="maxHeight">
       <ul>
         <ng-container *ngIf="listData && listData.lenght !== 0;else notFindTemplate">
-          <li *ngFor="let e of listData" (click)="valueChange(e.value)">
+          <li *ngFor="let e of listData" (click)="valueChange(e.value, $event)">
             {{e.label}}
           </li>
         </ng-container>

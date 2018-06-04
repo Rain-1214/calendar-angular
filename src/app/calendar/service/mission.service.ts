@@ -7,6 +7,9 @@ export class MissionService {
 
   constructor() { }
 
+  /**
+   * 组件间通信流
+   */
   private missionAnnounced = new Subject<SelectDate>();
 
   missionAnnounced$ = this.missionAnnounced.asObservable();

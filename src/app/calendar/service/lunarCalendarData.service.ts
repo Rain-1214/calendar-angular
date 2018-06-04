@@ -71,16 +71,28 @@ export class LunarCalendarDataService {
    * 1899年2月10号 是正月初一
    */
   private fromLunarDateSecondes = new Date(1899, 1, 10).getTime();
+  /**
+   * 本地数据中存储的第一个年份
+   */
   private firstDateYear = 1899;
+  /**
+   * 本地数据中存储的第一个年份的天干地支生肖数据
+   */
   private firstDateYearEra: ChineseEra = {
     heavenlyStems: 5,
     earthlyBranches: 11,
     era: '己亥',
     chineseZodiacAnimal: '猪',
   };
+  /**
+   * 数据中可获取的安全起始年份
+   */
   private safetyStartYear = 1900;
+  /**
+   * 数据中可获取的安全结束年份
+   */
   private safetyEndYear = 2050;
-  private dataCache: { [key: string]: LunarData } = {};
+  private dataCache: { [key: string]: LunarData } = {}; // 数据缓存
 
   constructor() {}
 
@@ -103,8 +115,8 @@ export class LunarCalendarDataService {
     if (this.dataCache[`${year}${month}${day}`]) {
       return this.dataCache[`${year}${month}${day}`];
     }
-    if (year < 1900 || year > 2050) {
-      throw new Error(`LunarCalendarData: getLunarMonthAndDay: 年份超出范围，当前年份${year}, 在1900-2050之间`);
+    if (year < 1899 || year > 2051) {
+      throw new Error(`LunarCalendarData: getLunarMonthAndDay: 年份超出范围，当前年份${year}, 在${this.safetyStartYear}-${this.safetyEndYear}之间`);
     }
     const currentDate = new Date(year, month - 1, day);
     let betweenDays = (currentDate.getTime() - this.fromLunarDateSecondes) / 1000 / 60 / 60 / 24 + 1;

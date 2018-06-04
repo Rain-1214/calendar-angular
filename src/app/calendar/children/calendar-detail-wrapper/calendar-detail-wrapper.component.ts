@@ -10,13 +10,22 @@ import { MissionService } from '../../service/mission.service';
 })
 export class CalendarDetailWrapperComponent implements OnInit {
 
+  /**
+   * 年份选项
+   */
   yearListData: ListData[];
+  /**
+   * 月份选项
+   */
   monthListData: ListData[];
 
   _currentYear: number;
   _currentMonth: number;
   _currentDay: number;
 
+  /**
+   * 当前选择的年
+   */
   set currentYear (value: number) {
     if (value) {
       this.missionService.announcedMission({year: value, month: this.currentMonth, day: this.currentDay});
@@ -28,6 +37,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
     return this._currentYear;
   }
 
+  /**
+   * 当前选择的月
+   */
   set currentMonth (value: number) {
     if (value) {
       this.missionService.announcedMission({year: this.currentYear, month: value, day: this.currentDay});
@@ -39,6 +51,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
     return this._currentMonth;
   }
 
+  /**
+   * 当前选择的日号
+   */
   set currentDay (value: number) {
     if (value) {
       this.missionService.announcedMission({year: this.currentYear, month: this.currentMonth, day: value});
@@ -59,6 +74,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
     this.initSelectDate();
   }
 
+  /**
+   * 生成年份月份选项
+   */
   initSelectDate(): void {
     const currentDate = new Date();
     this.currentYear = currentDate.getFullYear();
@@ -81,10 +99,45 @@ export class CalendarDetailWrapperComponent implements OnInit {
     this.currentDay = currentDate.getDate();
   }
 
+  /**
+   * 返回今天
+   */
   resetDate (): void {
     const currentDate = new Date();
     this.currentYear = currentDate.getFullYear();
     this.currentMonth = currentDate.getMonth() + 1;
+  }
+
+  /**
+   * 切换到下个月
+   */
+  nextMonth(): void {
+    const { endYear } = this.lunarCalendarDataService.getScopeOfLunarYear();
+    if (this.currentYear === endYear && this.currentMonth === 12) {
+      return;
+    }
+    if (this.currentMonth === 12) {
+      this.currentMonth = 1;
+      this.currentYear++;
+    } else {
+      this.currentMonth++;
+    }
+  }
+
+  /**
+   * 切换到上个月
+   */
+  prevMonth(): void {
+    const { startYear } = this.lunarCalendarDataService.getScopeOfLunarYear();
+    if (this.currentYear === startYear && this.currentMonth === 1) {
+      return;
+    }
+    if (this.currentMonth === 1) {
+      this.currentMonth = 12;
+      this.currentYear--;
+    } else {
+      this.currentMonth--;
+    }
   }
 
 }

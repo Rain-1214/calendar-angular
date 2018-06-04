@@ -6,9 +6,10 @@
   <ng-content></ng-content>
   <div *ngIf="showScroll"
        class="scroll-bar"
-       (click)="scrollBarClick($event)">
+       (mouseup)="scrollBarClick($event)">
     <div class="bar"
          [style.top]="scrollBarScrollTop + 'px'"
+         (click)="$event.stopPropagation()"
          (mousedown)="startMove($event)"
          (mouseup)="endMove($event)"></div>
   </div>

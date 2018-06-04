@@ -8,7 +8,46 @@
     border-bottom: 1px solid $border-color-blue;
     >div{
       margin-right: 10px;
+      display: flex;
     }
+  }
+}
+
+.icon{
+  box-sizing: border-box;
+  width: 22px;
+  height: 26px;
+  border: 1px solid $border-color-gray-dark;
+  position: relative;
+  cursor: pointer;
+  &:hover{
+    background: $border-color-gray-dark;
+    &::after{
+      border-color: $border-color-white;
+    }
+  }
+  &.prev{
+    border-right: none;
+    &::after{
+      transform: translate(-2.5px, -4.5px) rotateZ(45deg);
+    }
+  }
+  &.next{
+    border-left: none;
+    &::after{
+      transform: translate(-7.5px, -4.5px) rotateZ(-135deg);
+    }
+  }
+  &::after{
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-left: 1px solid $border-color-gray-dark;
+    border-bottom: 1px solid $border-color-gray-dark;
   }
 }
 

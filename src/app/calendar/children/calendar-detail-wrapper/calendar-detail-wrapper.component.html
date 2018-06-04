@@ -6,9 +6,11 @@
                     [listData]="yearListData"></app-dropdown>
     </div>
     <div>
+      <div class="icon prev" (click)="prevMonth()"></div>
       <app-dropdown [maxHeight]="200"
                     [(selectValue)]="currentMonth"
                     [listData]="monthListData"></app-dropdown>
+      <div class="icon next" (click)="nextMonth()"></div>
     </div>
     <div>
       <button class="btn" (click)="resetDate()">返回今日</button>

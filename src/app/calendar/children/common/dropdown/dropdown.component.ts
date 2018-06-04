@@ -13,9 +13,14 @@ export class DropdownComponent implements OnInit {
   @Input() display = 'inline-block'; // 元素display值
   @Input() listData: ListData[]; // 选项数据数组
   @Input() maxHeight: number; // 下拉最大高度
+  /**
+   * 是否可以点击其他位置关闭选项列表
+   */
+  @Input() globalClickClose = true;
   @ViewChild(MinScrollBarComponent) minScrollBarComponent: MinScrollBarComponent; // 指向滚动条组件
 
   private _selectValue; // 选择的值
+
   @Input()
   set selectValue (value: string) {
     this._selectValue = value;
@@ -29,6 +34,9 @@ export class DropdownComponent implements OnInit {
 
   dropdownListShow = false; // 是否显示下拉菜单
 
+  /**
+   * 单个选项高度
+   */
   private liHeight = 24;
 
   constructor() { }
@@ -37,8 +45,20 @@ export class DropdownComponent implements OnInit {
    * 定义全局关闭下拉菜单事件
    */
   ngOnInit() {
-    document.addEventListener('click', (event: MouseEvent) => {
-      this.dropdownListShow = false;
+    let canClose = false;
+    /**
+     * 为了使拖动选项滚动条时，鼠标移出滚动条而且在滚动条外松开时不关闭选项列表
+     * 所以设置了一个canClose开关，在min-scroll-bar-component中阻止冒泡，
+     * 来判断鼠标是否在拖动滚动条。
+     */
+    document.addEventListener('mousedown', (event: MouseEvent) => {
+      canClose = true;
+    });
+    document.addEventListener('mouseup', (event: MouseEvent) => {
+      if (canClose && this.globalClickClose) {
+        canClose = false;
+        this.dropdownListShow = false;
+      }
     });
   }
 
@@ -46,7 +66,8 @@ export class DropdownComponent implements OnInit {
    * 提交选择的选项
    * @param value 选择选项事件
    */
-  valueChange(value): void {
+  valueChange(value, event: MouseEvent): void {
+    event.stopPropagation();
     this.selectValueChange.emit(value);
     this.dropdownListShow = false;
   }
