@@ -1,8 +1,11 @@
 <div class="calendar-wrapper" [style.width]="width + 'px'">
   <div class="calendar-detail-wrapper">
-    <app-calendar-detail-wrapper></app-calendar-detail-wrapper>
+    <app-calendar-detail-wrapper [scheduleList]="scheduleList"
+                                 [showSchedule]="showSchedule"
+                                 [showToday]="showToday"
+                                 [scheduleIconColor]="scheduleIconColor"></app-calendar-detail-wrapper>
   </div>
   <div class="schedule-wrapper">
-    <app-schedule-wrapper></app-schedule-wrapper>
+    <app-schedule-wrapper [scheduleList]="scheduleList"></app-schedule-wrapper>
   </div>
 </div>

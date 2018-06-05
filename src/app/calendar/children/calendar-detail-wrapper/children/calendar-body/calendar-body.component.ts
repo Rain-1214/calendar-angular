@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { DateTableData, LunarData } from '../../../../calendar.type';
+import { DateTableData, LunarData, ScheduleList } from '../../../../calendar.type';
 import { LunarCalendarDataService } from '../../../../service/lunarCalendarData.service';
 
 @Component({
@@ -16,6 +16,9 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
   @Input() month: number; // 选择的月
   @Input() day: number; // 选择的日
   @Input() showToday = true; // 是否高亮显示今天
+  @Input() scheduleList: ScheduleList[]; // 日程数据
+  @Input() showSchedule = false; // 是否在日历中显示哪天有日程
+  @Input() scheduleIconColor = '#fb0'; // 显示日程的icon颜色
 
   @Output() monthChange = new EventEmitter<number>(); // 双向绑定年份
   @Output() yearChange = new EventEmitter<number>(); // 双向绑定月份
@@ -77,6 +80,7 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
           lunarDayStr: this.lunarCalendarDataService.translateDayNumToCalendarStr(lunarDay),
           isWeekend: week >= 6,
           isNotInCurrentMonth: false,
+          hasSchedule: this.checkDayHasSchedule(year, month, y)
         });
         y++;
         lunarDay++;
@@ -128,7 +132,8 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
           lunarDay: lunarDay,
           lunarDayStr: this.lunarCalendarDataService.translateDayNumToCalendarStr(lunarDay),
           isWeekend: week >= 6,
-          isNotInCurrentMonth: true
+          isNotInCurrentMonth: true,
+          hasSchedule: this.checkDayHasSchedule(year, month, i)
         });
       }
     }
@@ -165,10 +170,19 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
           lunarDay: lunarDay,
           lunarDayStr: this.lunarCalendarDataService.translateDayNumToCalendarStr(lunarDay),
           isWeekend: week >= 6,
-          isNotInCurrentMonth: true
+          isNotInCurrentMonth: true,
+          hasSchedule: this.checkDayHasSchedule(year, month, i)
         });
       }
     }
+  }
+
+  checkDayHasSchedule (year: number, month: number, day: number): boolean {
+    if (!this.showSchedule) {
+      return false;
+    }
+    const schedule = this.scheduleList.find(e => e.year === year && e.month === month && e.day === day);
+    return !!schedule;
   }
 
   /**

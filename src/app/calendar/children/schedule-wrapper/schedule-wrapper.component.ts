@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MissionService } from '../../service/mission.service';
-import { SelectDate, LunarData, Schedule } from '../../calendar.type';
+import { SelectDate, LunarData, Schedule, ScheduleList } from '../../calendar.type';
 import { LunarCalendarDataService } from '../../service/lunarCalendarData.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class ScheduleWrapperComponent implements OnInit {
    * 今天的阴历信息
    */
   private currentDayLunarCalendar: LunarData;
-  private currentDate: Date; // 今天的日期对象
+  private currentDate: Date; // 当前日期对象
   private chineseWeek = ['日', '一', '二', '三', '四', '五', '六'];
 
   /**
@@ -31,7 +31,8 @@ export class ScheduleWrapperComponent implements OnInit {
     return this._currentDay;
   }
 
-  @Input() scheduleList: { [key: string]: Array<Schedule> };
+  @Input() scheduleList: Array<ScheduleList> = [];
+  currentDaySchedule: Schedule[];
 
   constructor(
     private missionService: MissionService,
@@ -39,6 +40,9 @@ export class ScheduleWrapperComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    /**
+     * 订阅日期变更
+     */
     this.missionService.missionAnnounced$.subscribe(res => {
       this.currentDay = res;
     });
@@ -53,9 +57,11 @@ export class ScheduleWrapperComponent implements OnInit {
   }
 
   initData() {
-    this.currentDayLunarCalendar = this.lunarCalendarDataService
-                                       .getLunarMonthAndDay(this.currentDay.year, this.currentDay.month, this.currentDay.day);
+    const { year, month, day } = this.currentDay;
+    this.currentDayLunarCalendar = this.lunarCalendarDataService.getLunarMonthAndDay(year, month, day);
     this.currentDate = new Date(this.currentDay.year, this.currentDay.month - 1, this.currentDay.day);
+    const currentDaySchedule = this.scheduleList.find(e => e.year === year && e.month === month && e.day === day);
+    this.currentDaySchedule = currentDaySchedule ? currentDaySchedule.schedules : [];
   }
 
 }

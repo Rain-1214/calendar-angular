@@ -16,7 +16,19 @@
       今日日程
     </div>
     <ul>
-      <li></li>
+      <ng-container *ngIf="currentDaySchedule.length !== 0; else elseTemplate">
+        <li *ngFor="let schedule of currentDaySchedule">
+          <div class="time">
+            <i class="icon" [style.backgroundColor]="schedule.iconColor"></i> {{schedule.startTime}} - {{schedule.endTime}}
+          </div>
+          <div class="description">
+            {{schedule.description}}
+          </div>
+        </li>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <li class="empty">暂无日程</li>
+      </ng-template>
     </ul>
   </div>
 </div>

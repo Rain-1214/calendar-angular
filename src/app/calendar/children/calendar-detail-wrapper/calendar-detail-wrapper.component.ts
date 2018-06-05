@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ListData, DateTableData } from '../../calendar.type';
+import { Component, OnInit, Input } from '@angular/core';
+import { ListData, DateTableData, ScheduleList } from '../../calendar.type';
 import { LunarCalendarDataService } from '../../service/lunarCalendarData.service';
 import { MissionService } from '../../service/mission.service';
 
@@ -18,6 +18,11 @@ export class CalendarDetailWrapperComponent implements OnInit {
    * 月份选项
    */
   monthListData: ListData[];
+
+  @Input() scheduleList: ScheduleList[]; // 日程数据
+  @Input() showSchedule: boolean; // 是否在日历中显示哪天有日程
+  @Input() showToday: boolean; // 是否高亮显示今天
+  @Input() scheduleIconColor: string; // 日历中有日程的日期icon颜色
 
   _currentYear: number;
   _currentMonth: number;
@@ -106,6 +111,7 @@ export class CalendarDetailWrapperComponent implements OnInit {
     const currentDate = new Date();
     this.currentYear = currentDate.getFullYear();
     this.currentMonth = currentDate.getMonth() + 1;
+    this.currentDay = currentDate.getDate();
   }
 
   /**

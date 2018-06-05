@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { DropdownComponent } from './dropdown.component';
+import { MinScrollBarComponent } from '../min-scroll-bar/min-scroll-bar.component';
 
 describe('DropdownComponent', () => {
   let component: DropdownComponent;
@@ -11,7 +12,10 @@ describe('DropdownComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DropdownComponent ]
+      declarations: [
+        DropdownComponent,
+        MinScrollBarComponent
+      ]
     })
     .compileComponents();
   }));

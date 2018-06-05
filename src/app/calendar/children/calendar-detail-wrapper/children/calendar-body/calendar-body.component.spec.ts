@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { CalendarBodyComponent } from './calendar-body.component';
+import { LunarCalendarDataService } from '../../../../service/lunarCalendarData.service';
 
 describe('CalendarBodyComponent', () => {
   let component: CalendarBodyComponent;
@@ -11,7 +12,10 @@ describe('CalendarBodyComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalendarBodyComponent ]
+      declarations: [ CalendarBodyComponent ],
+      providers: [
+        LunarCalendarDataService
+      ]
     })
     .compileComponents();
   }));

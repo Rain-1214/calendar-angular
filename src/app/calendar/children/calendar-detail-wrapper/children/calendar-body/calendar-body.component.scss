@@ -9,7 +9,7 @@ table{
   tr{
     th{
       font-weight: normal;
-      padding: 6px 0;
+      padding: 6px 0 3px;
     }
     td{
       border-top: 1px solid $border-color-gray-dark;
@@ -25,6 +25,11 @@ table{
           color: $text-color-gray-dark !important;
           .lunar-text{
             color: $text-color-gray-dark !important;
+          }
+          .schedule-icon{
+            i{
+              background: $text-color-gray-dark !important;
+            }
           }
         }
         &.active{
@@ -52,6 +57,16 @@ table{
         .lunar-text{
           color: $text-color-gray-darken;
           font-size: 12px;
+        }
+        .schedule-icon{
+          height: 5px;
+          margin-top: 3px;
+          i{
+            display: block;
+            width: 5px;
+            height: 5px;
+            margin: 0 auto;
+          }
         }
       }
     }

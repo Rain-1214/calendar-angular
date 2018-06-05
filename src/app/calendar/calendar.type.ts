@@ -24,6 +24,7 @@ export interface DateTableData {
   lunarDayStr: string;
   isWeekend: boolean;
   isNotInCurrentMonth: boolean;
+  hasSchedule: boolean;
 }
 
 export interface SelectDate {
@@ -41,7 +42,14 @@ export interface ChineseEra {
 
 export interface Schedule {
   startTime: string;
-  endTimet: string;
-  descriptiong: string;
+  endTime: string;
+  description: string;
   iconColor: string;
+}
+
+export interface ScheduleList {
+  year: number;
+  month: number;
+  day: number;
+  schedules: Schedule[];
 }

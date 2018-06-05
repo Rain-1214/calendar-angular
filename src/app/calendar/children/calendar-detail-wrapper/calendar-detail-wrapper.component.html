@@ -17,6 +17,8 @@
     </div>
   </div>
   <div class="body">
-    <app-calendar-body [(year)]="currentYear" [(month)]="currentMonth" [(day)]="currentDay"></app-calendar-body>
+    <app-calendar-body [(year)]="currentYear" [(month)]="currentMonth" [(day)]="currentDay"
+                       [showToday]="showToday" [scheduleList]="scheduleList" [showSchedule]="showSchedule"
+                       [scheduleIconColor]="scheduleIconColor"></app-calendar-body>
   </div>
 </div>

@@ -178,7 +178,7 @@ export class LunarCalendarDataService {
         heavenlyStems,
         earthlyBranches,
         era: `${this.heavenlyStems[heavenlyStems]}${this.earthlyBranches[earthlyBranches]}`,
-        chineseZodiacAnimal: `${this.chineseZodiacAnimal[earthlyBranches]}`
+        chineseZodiacAnimal: this.chineseZodiacAnimal[earthlyBranches]
       }
     };
     this.dataCache[`${year}${month}${day}`] = result;

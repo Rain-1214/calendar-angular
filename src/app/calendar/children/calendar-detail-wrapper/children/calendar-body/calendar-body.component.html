@@ -19,6 +19,9 @@
             (click)="selectDayEvent(item, $event)">
           <span class="number">{{ item.day }}</span>
           <span class="lunar-text">{{ item.lunarDayStr }}</span>
+          <div class="schedule-icon" *ngIf="showSchedule">
+            <i [style.backgroundColor]="scheduleIconColor" *ngIf="item.hasSchedule"></i>
+          </div>
         </div>
       </td>
     </tr>
