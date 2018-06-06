@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ScheduleWrapperComponent } from './schedule-wrapper.component';
+import { MissionService } from '../../service/mission.service';
+import { LunarCalendarDataService } from '../../service/lunarCalendarData.service';
 
 describe('ScheduleWrapperComponent', () => {
   let component: ScheduleWrapperComponent;
@@ -11,7 +13,11 @@ describe('ScheduleWrapperComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScheduleWrapperComponent ]
+      declarations: [ ScheduleWrapperComponent ],
+      providers: [
+        MissionService,
+        LunarCalendarDataService
+      ]
     })
     .compileComponents();
   }));

@@ -31,6 +31,7 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
   ngOnInit() {
     const date = new Date();
     this.createDate(this.year || date.getFullYear(), this.month || date.getMonth() + 1);
+    this.lunarCalendarDataService.getLunarMonthAndDay(1900, 11, 6);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

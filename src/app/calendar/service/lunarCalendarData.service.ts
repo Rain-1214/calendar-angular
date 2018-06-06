@@ -115,7 +115,7 @@ export class LunarCalendarDataService {
     if (this.dataCache[`${year}${month}${day}`]) {
       return this.dataCache[`${year}${month}${day}`];
     }
-    if (year < 1899 || year > 2051) {
+    if (year < 1899 || year > 2051 || year === 1899 && month < 12 || year === 2051 && month > 1) {
       throw new Error(`LunarCalendarData: getLunarMonthAndDay: 年份超出范围，当前年份${year}, 在${this.safetyStartYear}-${this.safetyEndYear}之间`);
     }
     const currentDate = new Date(year, month - 1, day);
@@ -159,7 +159,7 @@ export class LunarCalendarDataService {
           if (lunarMonth === currentLeapMonthNum + 1) {
             isLeapMonth = true;
             lunarMonth--;
-          } else if (lunarMonth > currentMonthDaysNum + 1) {
+          } else if (lunarMonth > currentLeapMonthNum + 1) {
             lunarMonth--;
           }
         }
@@ -187,9 +187,10 @@ export class LunarCalendarDataService {
 
   /**
    * 获取一个阴历年当中是否有闰月
-   * @param year 要获取的年份
+   * @param year 要获取的年份 仅仅支持1900-2050年
    */
   getIsLeapYear (year: number): boolean {
+    this.checkYearSafety(year);
     const currentYearData = this.lunarCalendarData[year - this.firstDateYear];
     return ((currentYearData & 0x1e000) >> 13) > 0;
   }
@@ -199,6 +200,7 @@ export class LunarCalendarDataService {
    * @param year 要获取的年份
    */
   getLunarYearDayNum (year: number): number {
+    this.checkYearSafety(year);
     const currentYearData = this.lunarCalendarData[year - this.firstDateYear];
     const isLeapYear = this.getIsLeapYear(year);
     let monthNum = isLeapYear ? 13 : 12;
@@ -214,6 +216,7 @@ export class LunarCalendarDataService {
    * @param year 要获取的年份
    */
   getLeapMonthNum (year: number): number {
+    this.checkYearSafety(year);
     if (this.getIsLeapYear(year)) {
       return (this.lunarCalendarData[year - this.firstDateYear] & 0x1e000) >> 13;
     } else {
@@ -228,6 +231,7 @@ export class LunarCalendarDataService {
    * @param isLeapMonth 要获取的月份是否是闰月
    */
   getLunarMonthDays (year: number, month: number, isLeapMonth?: boolean): number {
+    this.checkYearSafety(year);
     const currentYearData = this.lunarCalendarData[year - this.firstDateYear];
     let tempMonth = month;
     const isLeapYear = this.getIsLeapYear(year);
@@ -280,5 +284,15 @@ export class LunarCalendarDataService {
       startYear: this.safetyStartYear,
       endYear: this.safetyEndYear
     };
+  }
+
+  /**
+   * 检测一个年份是否在安全范围内
+   * @param year 检测的年份
+   */
+  private checkYearSafety (year: number) {
+    if (year < this.safetyStartYear - 1 || year > this.safetyEndYear + 1) {
+      throw new Error(`year必须在${this.safetyStartYear}-${this.safetyEndYear}之间`);
+    }
   }
 }

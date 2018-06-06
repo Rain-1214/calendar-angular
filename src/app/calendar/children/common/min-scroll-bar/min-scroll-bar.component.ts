@@ -104,10 +104,7 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
    * view初始化之后获取元素
    */
   ngAfterViewInit(): void {
-    this.scrollElement = this.wrapper.nativeElement.children[0] as HTMLElement;
-    if (this.scrollElement.style.position === '') {
-      this.scrollElement.style.position = 'relative';
-    }
+    this.scrollElement = this.wrapper.nativeElement;
   }
 
   /**
