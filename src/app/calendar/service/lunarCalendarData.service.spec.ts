@@ -91,7 +91,35 @@ describe('Service: LunarCalendarData', () => {
   it('shuold return leap month number from "getLeapMonthNum"', inject([LunarCalendarDataService], (service: LunarCalendarDataService) => {
     expect(service.getLeapMonthNum(1900)).toBe(8);
     expect(service.getLeapMonthNum(2017)).toBe(6);
+    expect(service.getLeapMonthNum(2015)).toBe(-1);
     expect(() => service.getLeapMonthNum(1898)).toThrow();
     expect(() => service.getLeapMonthNum(2052)).toThrow();
   }));
+
+  // tslint:disable-next-line:max-line-length
+  it('shuold return day num of lunar month from "getLunarMonthDays"', inject([LunarCalendarDataService], (service: LunarCalendarDataService) => {
+    expect(service.getLunarMonthDays(2018, 4)).toBe(30);
+    expect(service.getLunarMonthDays(2018, 1)).toBe(29);
+    expect(() => service.getLunarMonthDays(1898, 1)).toThrow();
+    expect(() => service.getLunarMonthDays(2052, 1)).toThrow();
+    expect(service.getLunarMonthDays(1900, 8)).toBe(30);
+    expect(service.getLunarMonthDays(1900, 8, true)).toBe(29);
+    expect(() => service.getLunarMonthDays(2018, 1, true)).toThrow();
+  }));
+
+  it('shuold translate day num to chinese', inject([LunarCalendarDataService], (service: LunarCalendarDataService) => {
+    expect(service.translateDayNumToCalendarStr(1)).toBe('初一');
+    expect(service.translateDayNumToCalendarStr(10)).toBe('初十');
+    expect(service.translateDayNumToCalendarStr(12)).toBe('十二');
+    expect(service.translateDayNumToCalendarStr(20)).toBe('二十');
+    expect(service.translateDayNumToCalendarStr(22)).toBe('廿二');
+    expect(service.translateDayNumToCalendarStr(30)).toBe('三十');
+    expect(() => service.translateDayNumToCalendarStr(31)).toThrow();
+    expect(() => service.translateDayNumToCalendarStr(0)).toThrow();
+  }));
+
+  it('should return safety scope of year', inject([LunarCalendarDataService], (service: LunarCalendarDataService) => {
+    expect(service.getScopeOfLunarYear()).toEqual({startYear: 1900, endYear: 2050});
+  }));
+
 });

@@ -227,7 +227,7 @@ export class LunarCalendarDataService {
   /**
    * 获取一个阴历月份的天数，如果要获取闰月需要指定 isLeapMonth
    * @param year 获取的年份
-   * @param month 获取约人
+   * @param month 获取的月份(阴历)
    * @param isLeapMonth 要获取的月份是否是闰月
    */
   getLunarMonthDays (year: number, month: number, isLeapMonth?: boolean): number {
