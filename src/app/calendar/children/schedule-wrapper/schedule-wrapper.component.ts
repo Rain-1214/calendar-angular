@@ -14,9 +14,9 @@ export class ScheduleWrapperComponent implements OnInit {
   /**
    * 今天的阴历信息
    */
-  private currentDayLunarCalendar: LunarData;
-  private currentDate: Date; // 当前日期对象
-  private chineseWeek = ['日', '一', '二', '三', '四', '五', '六'];
+  currentDayLunarCalendar: LunarData;
+  currentDate: Date; // 当前日期对象
+  chineseWeek = ['日', '一', '二', '三', '四', '五', '六'];
 
   /**
    * 选择的日期

@@ -1,6 +1,6 @@
 <div class="min-scroll-bar-wrapper" 
      [class.hasScroll]="showScroll" 
-     [style.maxHeight]="maxHeight + 'px'"
+     [style.maxHeight]="maxHeight ? maxHeight + 'px' : null"
      (mousewheel)="onMouseWheel($event)">
   <div class="scroll-wrapper" #wrapper>
     <ng-content></ng-content>

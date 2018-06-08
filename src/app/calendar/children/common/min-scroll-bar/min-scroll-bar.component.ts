@@ -15,7 +15,7 @@ export class MinScrollBarComponent implements AfterViewInit, AfterContentChecked
   /**
    * 设定的最大高度
    */
-  @Input() maxHeight;
+  @Input() maxHeight: number;
   /**
    * 是否显示滚动条
    */

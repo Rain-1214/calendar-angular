@@ -1,6 +1,8 @@
 <div class="schedule-wrapper">
   <div class="header">
-    {{currentDate.getFullYear()}}-{{currentDate.getMonth() + 1}}-{{currentDate.getDate()}} 星期{{chineseWeek[currentDate.getDay()]}}
+    <div>
+      {{currentDate.getFullYear()}}-{{currentDate.getMonth() + 1}}-{{currentDate.getDate()}} 星期{{chineseWeek[currentDate.getDay()]}}
+    </div>
     <div class="day">
       {{currentDate.getDate()}}
     </div>
