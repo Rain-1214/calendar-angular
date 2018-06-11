@@ -128,10 +128,12 @@ describe('ScheduleWrapperComponent', () => {
 
   it('should show ".empty" when currentDaySchedule length equal 0', () => {
     component.currentDaySchedule = [];
+    component.ngOnInit();
     fixture.detectChanges();
     const ul = debugElement.query(By.css('ul'));
     expect(ul.children.length).toBe(1);
     const emptyLi = ul.children[0];
+    expect((emptyLi.nativeElement as HTMLElement).classList.contains('empty')).toBe(true);
     expect((emptyLi.nativeElement as HTMLElement).innerText).toBe('暂无日程');
   });
 
