@@ -76,13 +76,13 @@ export class CalendarDetailWrapperComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.initSelectDate();
+    this.initSelectData();
   }
 
   /**
    * 生成年份月份选项
    */
-  initSelectDate(): void {
+  initSelectData(): void {
     const currentDate = new Date();
     this.currentYear = currentDate.getFullYear();
     const scopeOfYear = this.lunarCalendarDataService.getScopeOfLunarYear();

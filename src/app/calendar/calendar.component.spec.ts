@@ -44,7 +44,7 @@ describe('CalendarComponent', () => {
     expect(calendarWrapperDiv).toBeTruthy();
   });
 
-  it('".calendar-wrapper" width of style should equal property width', () => {
+  it('".calendar-wrapper" width should equal width of component property "width"', () => {
     component.width = 500;
     fixture.detectChanges();
     const calendarWrapperDiv = debugElement.query(By.css('.calendar-wrapper'));

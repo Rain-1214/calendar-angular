@@ -79,7 +79,7 @@ export class DropdownComponent implements OnInit {
   showDropdownList(event: MouseEvent): void {
     event.stopPropagation();
     this.dropdownListShow = !this.dropdownListShow;
-    if (this.dropdownListShow) {
+    if (this.dropdownListShow && this.listData && this.listData.length !== 0) {
       let tempScrollTop = 0;
       this.listData.forEach((e, i) => {
         if (e.value === this.selectValue) {

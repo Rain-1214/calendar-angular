@@ -31,7 +31,6 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
   ngOnInit() {
     const date = new Date();
     this.createDate(this.year || date.getFullYear(), this.month || date.getMonth() + 1);
-    this.lunarCalendarDataService.getLunarMonthAndDay(1900, 11, 6);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -89,7 +88,7 @@ export class CalendarBodyComponent implements OnInit, OnChanges {
         if (week > 7) {
           week = 1;
         }
-        if (lunarDay >= lunarDateData.currentMonthDaysNum) {
+        if (lunarDay > lunarDateData.currentMonthDaysNum) {
           lunarDateData = this.lunarCalendarDataService.getLunarMonthAndDay(year, month, y);
           lunarDay = lunarDateData.day;
         }

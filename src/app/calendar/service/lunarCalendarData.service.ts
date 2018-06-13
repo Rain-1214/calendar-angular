@@ -109,6 +109,12 @@ export class LunarCalendarDataService {
    *    currentMonthDaysNum: number; 当前阴历月份一共有多少天
    *    isLeapMonth: boolean; 当前月份是否是闰月
    *    isLeapYear: boolean; 当前阴历年是否是闰年
+   *    chineseEra: {
+   *        heavenlyStems: 天干，在天干数组中的下标
+   *        earthlyBranches: 地支，在地支数组中的下标
+   *        era: 天干和地支字符串
+   *        chineseZodiacAnimal: 生肖年
+   *   }
    * }
    */
   getLunarMonthAndDay (year: number, month: number, day: number): LunarData {
