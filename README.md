@@ -1,27 +1,18 @@
-# CalendarAngular
+## 一个可以显示日程的日历组件
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.3.
+### 实现的功能
+* 默认显示当前月份，并高亮显示今天(可关闭)。
+* 可以通过年份和月份下拉选择来切换日历。
+* 可以通过参数控制是否将哪天有日程以一个点的形式直接显示在日历当中。
+* 可以通过点击日历中的日期来选择某一天，并在右侧显示其如果有的日程。
+* 如果点击到了不在当前月份的日期会自动切换到对应的月份。
+* 日历可以显示1900-2050的阴历和阳历每一天的数据以及生肖年、天干地支年。
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### 目前留出的@Input参数
+|参数名称|参数类型|参数功能|是否有默认值|
+|-------|-------|-------|-------|
+|width|number|整个组件宽度|550|
+|scheduleList|ScheduleList[]|所提供的日程数据| -- |
+|showSchedule|boolean|是否在日历中显示哪天有日程|false|
+|scheduleIconColor|string('#xxxxxx' \| '#xxx' \| 'rgb(xx,xx,xx)')|如果需要在日历中显示哪天有日程，所显示的icon颜色|#fb0|
+|showToday|boolean|是否高亮显示今天|true|

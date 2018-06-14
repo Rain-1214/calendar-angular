@@ -5,7 +5,7 @@ import { DebugElement } from '@angular/core';
 
 import { CalendarBodyComponent } from './calendar-body.component';
 import { LunarCalendarDataService } from '../../../../service/lunarCalendarData.service';
-import { LunarData } from '../../../../calendar.type';
+import { LunarData, ScheduleList } from '../../../../calendar.type';
 
 describe('CalendarBodyComponent', () => {
   let component: CalendarBodyComponent;
@@ -61,7 +61,7 @@ describe('CalendarBodyComponent', () => {
               chineseZodiacAnimal: '马年'
             }
           };
-        case (year === 2014 && month === 7 && day === 30):
+        case (year === 2014 && month === 6 && day === 30):
           return {
             month: 6,
             monthStr: '六月',
@@ -111,10 +111,10 @@ describe('CalendarBodyComponent', () => {
           };
         default:
           return {
-            month: 7,
-            monthStr: '七月',
-            day: 6,
-            dayStr: '初六',
+            month: 1,
+            monthStr: '一月',
+            day: 1,
+            dayStr: '初一',
             currentMonthDaysNum: 29,
             isLeapMonth: false,
             isLeapYear: false,
@@ -187,17 +187,7 @@ describe('CalendarBodyComponent', () => {
     const lunarService = TestBed.get(LunarCalendarDataService);
     const tr = debugElement.queryAll(By.css('tr'));
     expect(tr.length).toBe(6);
-    // const firstTr = tr[1];
-    // expect(firstTr.children.length).toBe(7);
-    // const firstTd = firstTr.children[0];
-    // const fisrtTdDiv = firstTd.query(By.css('div'));
-    // expect((fisrtTdDiv.nativeElement as HTMLElement).classList.contains('isNotInCurrentMonth')).toBe(true);
-    // const firstTdNumberSpan = fisrtTdDiv.query(By.css('.number'));
-    // expect((firstTdNumberSpan.nativeElement as HTMLElement).innerText.trim()).toBe('30');
-    // const firstTdLunarTextSpan = fisrtTdDiv.query(By.css('.lunar-text'));
-    // expect((firstTdLunarTextSpan.nativeElement as HTMLElement).innerText.trim()).toBe('初四');
-    // const scheduleIcon = fisrtTdDiv.query(By.css('.schedule-icon'));
-    // expect(scheduleIcon).toBeNull();
+
     let currentDay = 30;
     let currentLunarDay = 4;
     for (let i = 1; i < 6; i++) {
@@ -209,10 +199,6 @@ describe('CalendarBodyComponent', () => {
         const currentNumberSpan = currentDiv.query(By.css('.number'));
         expect((currentNumberSpan.nativeElement as HTMLElement).innerText.trim()).toBe(`${currentDay}`);
         const currentDivLunarTextSpan = currentDiv.query(By.css('.lunar-text'));
-        if ((currentDivLunarTextSpan.nativeElement as HTMLElement).innerText.trim() === '初六') {
-          console.log(currentDivLunarTextSpan.nativeElement);
-          console.log(i, y);
-        }
         expect((currentDivLunarTextSpan.nativeElement as HTMLElement).innerText.trim()).toBe(
           `${lunarService.translateDayNumToCalendarStr(currentLunarDay)}`
         );
@@ -226,6 +212,9 @@ describe('CalendarBodyComponent', () => {
         if (currentDay > 31) {
           currentDay = 1;
         }
+        if (y >= 6) {
+          expect((currentDiv.nativeElement as HTMLElement).classList.contains('isWeekend')).toBe(true);
+        }
         if (i === 1 && y === 0) {
           expect((currentDiv.nativeElement as HTMLElement).classList.contains('isNotInCurrentMonth')).toBe(true);
           currentDay = 1;
@@ -234,5 +223,87 @@ describe('CalendarBodyComponent', () => {
         }
       }
     }
+  });
+
+  it('should show schedule icon in celendar tabel when "showSchedule" is true', () => {
+    const scheduleList: ScheduleList[] = [
+      {
+        year: 2014,
+        month: 7,
+        day: 5,
+        schedules: [
+          {
+            startTime: '9:00',
+            endTime: '10:00',
+            description: '吃饭',
+            iconColor: '#ff6700'
+          }
+        ]
+      }
+    ];
+    component.year = 2014;
+    component.month = 7;
+    component.day = 15;
+    component.showSchedule = true;
+    component.scheduleList = scheduleList;
+    const colorHex2rgb = (color: string): string => {
+      let red, green, blue;
+      if (color.length === 4) {
+        red = color.slice(1, 2).repeat(2);
+        green = color.slice(2, 3).repeat(2);
+        blue = color.slice(3).repeat(2);
+      } else if (color.length === 7) {
+        red = color.slice(1, 3);
+        green = color.slice(3, 5);
+        blue = color.slice(5);
+      }
+      red = Number.parseInt(red, 16);
+      green = Number.parseInt(green, 16);
+      blue = Number.parseInt(blue, 16);
+      return `rgb(${red}, ${green}, ${blue})`;
+    };
+    component.ngOnInit();
+    fixture.detectChanges();
+    const tr = debugElement.query(By.css('tr:nth-child(2)'));
+    const firstTd = tr.query(By.css('td:nth-child(6)'));
+    const fiveJulyDiv = firstTd.query(By.css('div'));
+    const scheduleIconWrapper = fiveJulyDiv.query(By.css('.schedule-icon'));
+    expect(scheduleIconWrapper).toBeTruthy();
+    const scheduleIcon = scheduleIconWrapper.query(By.css('i'));
+    expect(scheduleIcon).toBeTruthy();
+    expect((scheduleIcon.nativeElement as HTMLElement).style.backgroundColor).toBe(colorHex2rgb(component.scheduleIconColor));
+  });
+
+  it('should select day when click day div of table', () => {
+    component.year = 2014;
+    component.month = 7;
+    component.day = 15;
+    component.ngOnInit();
+    fixture.detectChanges();
+    const div = debugElement.query(By.css('table tr:nth-child(3) td:nth-child(3) div'));
+    const numberSpan = div.query(By.css('.number'));
+    expect((numberSpan.nativeElement as HTMLElement).innerText.trim()).toBe('9');
+    component.dayChange.subscribe(res => {
+      expect(res).toBe(9);
+    });
+    div.triggerEventHandler('click', new MouseEvent('click'));
+    fixture.detectChanges();
+    expect(component.year).toBe(2014);
+    expect(component.month).toBe(7);
+    expect(component.day).toBe(9);
+    expect((div.nativeElement as HTMLElement).classList.contains('active')).toBe(true);
+  });
+
+  it('show the day div of today in table default that should have class "today"', () => {
+    const today = new Date();
+    let currentMonthFirstDayWeek = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+    currentMonthFirstDayWeek = currentMonthFirstDayWeek === 0 ? 7 : currentMonthFirstDayWeek;
+    const dayNumBetweenFirstDay = today.getDate() + currentMonthFirstDayWeek - 1;
+    const row = Math.floor(dayNumBetweenFirstDay / 7) + 1;
+    const col = dayNumBetweenFirstDay % 7;
+    component.ngOnInit();
+    fixture.detectChanges();
+    const div = debugElement.query(By.css(`tr:nth-child(${row + 1}) td:nth-child(${col}) div`));
+    expect((div.nativeElement as HTMLElement).classList.contains('today')).toBe(true);
   });
 });
