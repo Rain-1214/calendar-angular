@@ -1,19 +1,19 @@
 <div class="dropdown-wrapper" [style.width] = "width + 'px'" [style.display] = "display">
-  <span class="value" (click)="showDropdownList($event)">
+  <span class="value" (click)="showDropdownList($event)" (mousedown)="$event.stopPropagation()">
     {{selectValue}}
   </span>
-  <span class="dropdown-btn" (click)="showDropdownList($event)">
+  <span class="dropdown-btn" (click)="showDropdownList($event)" (mousedown)="$event.stopPropagation()">
     <i class="icon-down"></i>
   </span>
   <div class="dropdown-list" [hidden]="!dropdownListShow">
     <app-min-scroll-bar [maxHeight]="maxHeight">
       <ul>
-        <ng-container *ngIf="listData && listData.lenght !== 0;else notFindTemplate">
+        <ng-container *ngIf="listData && listData.lenght !== 0;else empty">
           <li *ngFor="let e of listData" (click)="valueChange(e.value, $event)">
             {{e.label}}
           </li>
         </ng-container>
-        <ng-template #notFindTemplate>
+        <ng-template #empty>
           <li class="disabled">
             没有选项
           </li>

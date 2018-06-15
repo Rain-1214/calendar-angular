@@ -51,6 +51,7 @@ export class DropdownComponent implements OnInit {
      * 所以设置了一个canClose开关，在min-scroll-bar-component中阻止冒泡，
      * 来判断鼠标是否在拖动滚动条。
      */
+    console.log(1);
     document.addEventListener('mousedown', () => {
       canClose = true;
     });
