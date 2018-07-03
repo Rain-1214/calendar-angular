@@ -31,6 +31,7 @@ export class CalendarDetailWrapperComponent implements OnInit {
   /**
    * 当前选择的年
    */
+  @Input()
   set currentYear (value: number) {
     if (value) {
       this.missionService.announcedMission({year: value, month: this.currentMonth, day: this.currentDay});
@@ -45,6 +46,7 @@ export class CalendarDetailWrapperComponent implements OnInit {
   /**
    * 当前选择的月
    */
+  @Input()
   set currentMonth (value: number) {
     if (value) {
       this.missionService.announcedMission({year: this.currentYear, month: value, day: this.currentDay});
@@ -59,6 +61,7 @@ export class CalendarDetailWrapperComponent implements OnInit {
   /**
    * 当前选择的日号
    */
+  @Input()
   set currentDay (value: number) {
     if (value) {
       this.missionService.announcedMission({year: this.currentYear, month: this.currentMonth, day: value});
@@ -84,7 +87,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
    */
   initSelectData(): void {
     const currentDate = new Date();
-    this.currentYear = currentDate.getFullYear();
+    if (!this.currentYear) {
+      this.currentYear = currentDate.getFullYear();
+    }
     const scopeOfYear = this.lunarCalendarDataService.getScopeOfLunarYear();
     this.yearListData = [];
     for (let i = scopeOfYear.startYear; i <= scopeOfYear.endYear; i++) {
@@ -93,7 +98,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
         value: i
       });
     }
-    this.currentMonth = currentDate.getMonth() + 1;
+    if (!this.currentMonth) {
+      this.currentMonth = currentDate.getMonth() + 1;
+    }
     this.monthListData = [];
     for (let i = 1; i <= 12; i++) {
       this.monthListData.push({
@@ -101,7 +108,9 @@ export class CalendarDetailWrapperComponent implements OnInit {
         value: i
       });
     }
-    this.currentDay = currentDate.getDate();
+    if (!this.currentDay) {
+      this.currentDay = currentDate.getDate();
+    }
   }
 
   /**

@@ -1,7 +1,6 @@
 // tslint:disable:no-bitwise
 import { Injectable } from '@angular/core';
 import { LunarData, ChineseEra } from '../calendar.type';
-import { CalendarModule } from '../calendar.module';
 
 @Injectable()
 export class LunarCalendarDataService {
