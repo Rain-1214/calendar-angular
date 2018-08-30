@@ -17,8 +17,8 @@
 |scheduleIconColor|string('#xxxxxx' \| '#xxx' \| 'rgb(xx,xx,xx)')|如果需要在日历中显示哪天有日程，所显示的icon颜色|#fb0|
 |showToday|boolean|是否高亮显示今天|true|
 |defaultYear|number|默认显示的年份|当前日期的年份|
-|defaultMonth|boolean|默认显示的月份|当前日期的月份|
-|defaultDay|boolean|默写人显示的日期|当前日期的日期|
+|defaultMonth|number|默认显示的月份|当前日期的月份|
+|defaultDay|number|默写人显示的日期|当前日期的日期|
 |updateDate|(selectDate: ISelectDate<sup>注2</sup>) => void|在发生日期变更的时候触发的函数|--|
 
     注1:
